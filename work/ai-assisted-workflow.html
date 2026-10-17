@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>An AI-Assisted Design Workflow — Suraj</title>
+<meta name="description" content="A practical AI-assisted product design workflow, demonstrated through the evolution of Rate Card from a legacy tool to Rate AI.">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'light'}catch(e){document.documentElement.dataset.theme='light'}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+:root{--red:var(--cp-link);--red-lt:var(--cp-surface-soft);--ink:var(--cp-text);--ink-2:var(--cp-text-muted);--ink-3:var(--cp-text-soft);--ink-4:var(--cp-text-muted);--ink-5:var(--cp-border-strong);--rule:var(--cp-border);--surf:var(--cp-surface-soft);--white:var(--cp-surface);--ok:var(--cp-link);--ok-lt:var(--cp-surface-soft);--warn:var(--cp-text-muted);--warn-lt:var(--cp-surface-soft);--warnd:var(--cp-border-strong);--blue:var(--cp-link);--blue-lt:var(--cp-surface-soft);--purple:var(--cp-link);--purple-lt:var(--cp-surface-soft);--display:"Segoe UI",Aptos,Calibri,-apple-system,BlinkMacSystemFont,sans-serif;--body:"Segoe UI",Aptos,Calibri,-apple-system,BlinkMacSystemFont,sans-serif;--mono:Consolas,"Courier New",Courier,monospace;}
+body{font-family:var(--body);background:var(--cp-bg);color:var(--cp-text);-webkit-font-smoothing:antialiased;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:var(--cp-panel-strong);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);display:flex;align-items:center;padding:0 32px;gap:22px;}
+.nav-brand{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink);white-space:nowrap;}.nav-brand span{color:var(--red);}
+.nav-links{display:flex;gap:20px;margin-left:auto;}.nav-links a{font-size:11px;font-weight:500;color:var(--ink-3);text-decoration:none;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;}.nav-links a:hover{color:var(--ink);}
+.cover{padding:120px 0 56px;border-bottom:1px solid var(--rule);margin-top:52px;}
+.cover-inner{max-width:1080px;margin:0 auto;padding:0 48px;}
+.cover-label{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}.cover-label::before{content:'';display:block;width:24px;height:1px;background:var(--red);}
+.cover-h1{font-family:var(--display);font-weight:800;font-size:52px;line-height:1.08;letter-spacing:-1.6px;color:var(--ink);margin-bottom:18px;max-width:760px;}.cover-h1 em{font-style:normal;font-weight:900;color:var(--red);}
+.cover-p{font-size:15.5px;font-weight:400;line-height:1.75;color:var(--ink-2);max-width:600px;margin-bottom:14px;}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px;}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);border:1px solid var(--rule);padding:6px 12px 6px 10px;border-radius:20px;background:var(--surf);display:flex;align-items:center;gap:6px;}
+.tag .dot{width:6px;height:6px;border-radius:50%;}
+.w{max-width:1080px;margin:0 auto;padding:0 48px;}
+.chapter{padding:64px 0 0;}.chapter-inner{display:grid;grid-template-columns:130px 1fr;gap:52px;align-items:start;}
+.chapter-index{position:sticky;top:72px;}.chapter-num{font-family:var(--display);font-weight:900;font-size:66px;line-height:1;letter-spacing:-2px;color:var(--rule);user-select:none;}.chapter-tag{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.12em;text-transform:uppercase;margin-top:6px;}
+.chapter-title{font-family:var(--display);font-weight:800;font-size:31px;line-height:1.18;letter-spacing:-.8px;color:var(--ink);margin-bottom:6px;}.chapter-title em{font-style:normal;font-weight:900;color:var(--red);}
+.chapter-lead{font-size:14px;font-weight:400;line-height:1.7;color:var(--ink-2);margin-bottom:28px;max-width:560px;}
+.chapter-divider{height:1px;background:var(--rule);margin:52px 0 0;}
+p.body-p{font-size:14px;line-height:1.75;color:var(--ink-2);margin-bottom:12px;max-width:600px;}
+p.body-p:last-child{margin-bottom:0;}
+.icon{width:26px;height:26px;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.chip-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pull{border-left:3px solid var(--red);padding:16px 24px;margin:26px 0;}.pull p{font-family:var(--display);font-weight:700;font-size:19px;font-style:normal;line-height:1.45;color:var(--ink);}.pull p em{color:var(--red);font-weight:800;}.pull-source{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.08em;text-transform:uppercase;margin-top:8px;}
+/* loop */
+.loop-row{display:flex;align-items:center;gap:12px;margin:28px 0 24px;flex-wrap:wrap;}
+.loop-node{display:flex;align-items:center;gap:12px;background:var(--surf);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;}
+.loop-node .chip-icon{width:40px;height:40px;border-radius:9px;background:var(--white);border:1px solid var(--rule);}
+.loop-node .icon{width:20px;height:20px;stroke:var(--ink-2);}
+.loop-node-label{font-size:14px;font-weight:700;color:var(--ink);}
+.loop-arrow{font-size:18px;color:var(--ink-5);}
+/* before/after */
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:22px 0;}
+h4{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
+.ic-panel{padding:24px;}.ic-panel.before{background:var(--cp-accent-soft);}.ic-panel.after{background:var(--ok-lt);}
+.ic-heading{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}.ic-heading-dot{width:8px;height:8px;border-radius:50%;}
+.ic-panel.before .ic-heading{color:var(--cp-danger);}.ic-panel.before .ic-heading-dot{background:var(--cp-danger);}
+.ic-panel.after .ic-heading{color:var(--ok);}.ic-panel.after .ic-heading-dot{background:var(--ok);}
+.ic-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--cp-border);}.ic-item:last-child{border-bottom:none;}
+.ic-item .chip-icon{width:36px;height:36px;border-radius:9px;}
+.ic-item .icon{width:18px;height:18px;}
+.ic-panel.before .chip-icon{background:var(--cp-highlight);}.ic-panel.before .icon{stroke:var(--cp-danger);}
+.ic-panel.after .chip-icon{background:var(--cp-surface);}.ic-panel.after .icon{stroke:var(--ok);}
+.ic-text{font-size:12.5px;color:var(--ink-2);line-height:1.6;padding-top:6px;}
+.ic-text strong{color:var(--ink);display:block;font-size:13px;margin-bottom:2px;}
+/* phase strip (colored, icon-led) */
+.phase-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:8px 0 4px;}
+.phase-card{padding:28px 22px;color:var(--cp-accent-fg);}
+.phase-card .chip-icon{width:56px;height:56px;background:var(--cp-sheen);margin-bottom:16px;}
+.phase-card .icon{width:28px;height:28px;stroke:var(--cp-accent-fg);}
+.phase-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:6px;}
+.phase-name{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.3px;margin-bottom:10px;}
+.phase-stages{font-size:11px;line-height:1.9;opacity:.85;}
+.p-think{background:var(--cp-text);}.p-explore{background:var(--cp-link);}.p-validate{background:var(--cp-accent);}.p-ship{background:var(--cp-success);}
+.ship-note{display:flex;gap:14px;align-items:flex-start;background:var(--surf);border:1px solid var(--rule);border-radius:8px;padding:18px 22px;margin-top:18px;max-width:640px;}
+.ship-note .chip-icon{width:38px;height:38px;border-radius:9px;background:var(--warn-lt);}
+.ship-note .icon{width:19px;height:19px;stroke:var(--warn);}
+.ship-note-text{font-size:12.5px;color:var(--ink-2);line-height:1.65;}
+.ship-note-text strong{color:var(--ink);}
+/* worked example */
+.case-intro{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:28px;align-items:end;margin:0 0 36px;}
+.case-distinction{border-left:3px solid var(--cp-accent);padding:4px 0 4px 18px;}
+.case-distinction p{font-size:12.5px;line-height:1.6;color:var(--cp-text-muted);}
+.case-distinction strong{display:block;color:var(--cp-text);margin-bottom:4px;}
+.case-flow{position:relative;display:grid;gap:0;margin-top:8px;}
+.case-stage{position:relative;display:grid;grid-template-columns:88px minmax(0,1fr);gap:24px;padding:0 0 44px;}
+.case-stage:not(:last-child)::before{content:"";position:absolute;left:43px;top:36px;bottom:0;width:1px;background:var(--cp-border-strong);}
+.stage-marker{position:relative;z-index:1;width:88px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--cp-bg);border:1px solid var(--cp-border-strong);border-radius:.625rem;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--cp-text-muted);}
+.case-stage.is-method .stage-marker{background:var(--cp-accent);border-color:var(--cp-accent);color:var(--cp-accent-fg);}
+.stage-content{min-width:0;}
+.stage-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--cp-accent);margin-bottom:7px;}
+.stage-title{font-family:var(--display);font-size:22px;line-height:1.2;letter-spacing:-.4px;font-weight:700;color:var(--cp-text);margin-bottom:8px;}
+.stage-copy{font-size:13px;line-height:1.68;color:var(--cp-text-muted);max-width:650px;}
+.evidence{margin-top:20px;background:var(--cp-surface);border:1px solid var(--cp-border);border-radius:16px;overflow:hidden;box-shadow:0 0 2px var(--cp-border),0 1px 2px var(--cp-border);}
+.evidence img{display:block;width:100%;height:auto;background:var(--cp-surface);}
+.evidence figcaption{display:grid;grid-template-columns:112px 1fr;gap:14px;padding:14px 16px;border-top:1px solid var(--cp-border);font-size:11.5px;line-height:1.55;color:var(--cp-text-muted);}
+.evidence-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--cp-accent);}
+.method-panel{margin-top:18px;padding:22px;background:var(--cp-text);border-radius:16px;color:var(--cp-accent-fg);}
+.method-tools{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--cp-accent-fg);opacity:.72;margin-bottom:14px;}
+.method-loop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.method-step{padding:7px 10px;border:1px solid var(--cp-border-strong);border-radius:.625rem;font-size:11px;font-weight:600;}
+.method-arrow{color:var(--cp-border-strong);}
+.method-note{font-size:11.5px;line-height:1.6;color:var(--cp-border);margin-top:14px;max-width:620px;}
+.outcome-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cp-border);border:1px solid var(--cp-border);margin-top:18px;}
+.outcome-cell{background:var(--cp-surface);padding:20px;}
+.outcome-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--cp-accent);margin-bottom:7px;}
+.outcome-cell p{font-size:12.5px;line-height:1.6;color:var(--cp-text-muted);}
+.case-transition{margin-top:10px;padding:24px 0 0;border-top:1px solid var(--cp-border);}
+.case-transition p{font-family:var(--display);font-size:17px;font-weight:600;line-height:1.55;color:var(--cp-text);max-width:700px;}
+/* capability grid */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:24px 0;}
+.cap-tile{padding:28px 24px;background:var(--white);}
+.cap-tile .chip-icon{width:52px;height:52px;border-radius:50%;background:var(--red-lt);margin-bottom:16px;}
+.cap-tile .icon{stroke:var(--red);}
+.cap-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.cap-line{font-size:12.5px;color:var(--ink-2);line-height:1.6;}
+/* projects */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0;}
+.proj-cell{padding:28px 24px;background:var(--white);}
+.proj-cell .chip-icon{width:52px;height:52px;border-radius:50%;background:var(--surf);border:1px solid var(--rule);margin-bottom:16px;}
+.proj-cell .icon{stroke:var(--ink-3);}
+.proj-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+.proj-line{font-size:12.5px;color:var(--ink-2);line-height:1.55;margin-bottom:12px;}
+.rb{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:3px;display:inline-block;text-align:center;margin-right:6px;margin-bottom:4px;}
+.rb-live{background:var(--ok-lt);color:var(--ok);}.rb-pending{background:var(--warn-lt);color:var(--warn);}.rb-code{background:var(--blue-lt);color:var(--blue);}.rb-tbd{background:var(--surf);color:var(--ink-4);border:1px dashed var(--ink-5);}
+/* knowledge chips */
+.k-chips{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;}
+.k-chip{display:flex;align-items:center;gap:12px;background:var(--surf);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;}
+.k-chip .chip-icon{width:40px;height:40px;border-radius:9px;background:var(--white);border:1px solid var(--rule);}
+.k-chip .icon{width:20px;height:20px;stroke:var(--ink-2);}
+.k-chip-label{font-size:12.5px;font-weight:700;color:var(--ink);}
+/* callouts */
+.callout{padding:13px 18px;border-radius:0 4px 4px 0;margin-top:14px;max-width:600px;}
+.callout-needed{background:var(--warn-lt);border:1px dashed var(--warnd);border-left:none;border-radius:4px;}
+.co-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;font-weight:600;color:var(--warn);}
+.co-body{font-size:12px;color:var(--ink-2);line-height:1.6;}
+.close{padding:64px 0 0;}
+.close-quote{font-family:var(--display);font-weight:700;font-size:25px;font-style:normal;color:var(--ink);line-height:1.45;max-width:680px;margin-bottom:12px;}
+.close-quote em{color:var(--red);font-weight:800;}
+.close-sub{font-size:11.5px;color:var(--ink-4);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;}
+footer{border-top:1px solid var(--rule);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:56px auto 0;}
+.fl{font-family:var(--mono);font-size:11px;color:var(--ink-4);}.fbrand{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink-3);}
+
+/* Quiet systems direction: structured white space, graphite, and restrained green */
+body{background:var(--cp-bg-elevated);overflow-x:hidden;}
+nav{top:18px;left:50%;right:auto;transform:translateX(-50%);width:min(calc(100% - 40px),1080px);height:50px;padding:0 22px;border:0;border-radius:999px;background:var(--cp-panel-strong);box-shadow:0 0 0 1px var(--cp-border),0 8px 24px var(--cp-border);transition:transform 700ms cubic-bezier(.32,.72,0,1),box-shadow 700ms cubic-bezier(.32,.72,0,1)}
+.nav-brand{font-size:13px;letter-spacing:-.01em}.nav-brand span{color:var(--cp-success)}.nav-links{gap:20px}.nav-links a{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.04em;transition:color 500ms cubic-bezier(.32,.72,0,1),transform 500ms cubic-bezier(.32,.72,0,1)}.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;border-radius:999px;background:var(--cp-success);opacity:0;transform:scaleX(.35);transition:opacity 500ms cubic-bezier(.32,.72,0,1),transform 500ms cubic-bezier(.32,.72,0,1)}.nav-links a:hover{color:var(--cp-success);transform:translateY(-1px)}.nav-links a.is-active{color:var(--cp-success);font-weight:700}.nav-links a.is-active::after{opacity:1;transform:scaleX(1)}
+.cover{position:relative;min-height:100dvh;padding:150px 0 96px;margin-top:0;border:0;background-color:var(--cp-bg-elevated);background-image:linear-gradient(var(--cp-border) 1px,transparent 1px),linear-gradient(90deg,var(--cp-border) 1px,transparent 1px);background-size:48px 48px;background-position:center 160px;display:flex;align-items:center}
+.cover::before{content:"";position:absolute;inset:0;background:var(--cp-overlay);pointer-events:none}.cover-inner{position:relative;max-width:1180px;width:100%;padding:0 64px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.6fr);gap:96px;align-items:start}
+.cover-label{grid-column:1/-1;width:max-content;margin:0 0 18px;padding:9px 13px;border-radius:999px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);font-size:11px;letter-spacing:.08em;color:var(--cp-text-muted)}.cover-label::before{width:8px;height:8px;border-radius:50%;background:var(--cp-success)}
+.cover-h1{font-size:clamp(52px,6.2vw,82px);line-height:.96;letter-spacing:-.055em;max-width:700px;margin:0;text-wrap:balance}.cover-h1 em{color:var(--cp-success);font-weight:700}
+.cover-p{font-size:13px;line-height:1.7;max-width:390px;margin:12px 0 0;color:var(--cp-text-muted)}.cover-cta{grid-column:2;justify-self:start;display:inline-flex;align-items:center;gap:12px;margin-top:-70px;padding:7px 7px 7px 18px;border-radius:999px;background:var(--cp-text);color:var(--cp-surface);font-size:11px;font-weight:600;text-decoration:none;box-shadow:0 10px 24px var(--cp-border);transition:transform 650ms cubic-bezier(.32,.72,0,1)}.cover-cta:hover{transform:translateY(-2px)}.cover-cta span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--cp-surface-soft);color:var(--cp-text);transition:transform 650ms cubic-bezier(.32,.72,0,1)}.cover-cta:hover span{transform:translateY(2px)}
+.tag-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,max-content);margin:72px 0 0;gap:10px}.tag{justify-content:flex-start;padding:10px 14px;border:0;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);font-size:11px;letter-spacing:.025em}.tag .dot{width:7px;height:7px}
+.w{max-width:1180px;padding:0 64px}.chapter{padding:118px 0 20px}.chapter-inner{grid-template-columns:120px minmax(0,1fr);gap:64px}.chapter-index{top:94px}.chapter-num{font-size:74px;letter-spacing:-.06em;color:var(--cp-success)}.chapter-tag{font-size:11px;color:var(--cp-success)}
+.chapter-title{font-size:clamp(38px,4.8vw,58px);line-height:1;letter-spacing:-.05em;max-width:760px;margin-bottom:16px;text-wrap:balance}.chapter-title em{color:var(--cp-success)}.chapter-lead{font-size:14px;line-height:1.7;max-width:620px;margin-bottom:38px}.chapter-divider{height:1px;margin:88px 0 0;background:var(--cp-border)}
+p.body-p{font-size:14px;line-height:1.78;max-width:620px}.pull{margin:36px 0;padding:24px 28px;border:0;border-radius:16px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border)}.pull p{font-size:20px;line-height:1.45}.pull p em{color:var(--cp-success)}
+.loop-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;margin:38px 0}.loop-node{position:relative;align-items:flex-end;border:0;border-radius:16px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);padding:20px}.loop-node .chip-icon{border:0;background:var(--cp-surface-soft)}.loop-node .icon{stroke:var(--cp-success)}.loop-arrow{align-self:center}
+.cols-2{gap:12px;margin:32px 0}.ic-panel{padding:28px;border-radius:16px;background:var(--cp-surface)!important;box-shadow:0 0 0 1px var(--cp-border)}.ic-panel.before{opacity:.68}.ic-panel .chip-icon{background:var(--cp-surface-soft)!important}.ic-panel.before .icon,.ic-panel.after .icon{stroke:var(--cp-success)}.ic-panel.before .ic-heading,.ic-panel.after .ic-heading{color:var(--cp-success)}.ic-panel.before .ic-heading-dot,.ic-panel.after .ic-heading-dot{background:var(--cp-success)}
+.callout{max-width:620px;padding:17px 20px;border:0!important;border-radius:12px!important;background:var(--cp-surface)!important;box-shadow:0 0 0 1px var(--cp-border)}.co-label{font-size:11px;color:var(--cp-success)}
+.phase-strip{grid-template-columns:.72fr 1.42fr .72fr .72fr;gap:10px;background:transparent;margin:36px 0 20px;align-items:end}.phase-card{padding:24px 20px;border:0;border-radius:16px;background:var(--cp-surface)!important;color:var(--cp-text);box-shadow:0 0 0 1px var(--cp-border);transition:transform 750ms cubic-bezier(.32,.72,0,1),box-shadow 750ms cubic-bezier(.32,.72,0,1)}.phase-card:nth-child(2){min-height:430px;padding-top:150px;background-color:var(--cp-surface)!important;background-image:linear-gradient(135deg,var(--cp-surface-soft),var(--cp-bg-elevated))!important}.phase-card:hover{transform:translateY(-5px);box-shadow:0 0 0 1px var(--cp-success),0 24px 48px var(--cp-border)}.phase-card .chip-icon{background:var(--cp-surface-soft)}.phase-card .icon{stroke:var(--cp-success)}.phase-eyebrow{font-size:11px;color:var(--cp-border-strong);opacity:1}.phase-name{font-size:25px}.phase-stages{font-size:12px;color:var(--cp-text-muted);opacity:1;line-height:1.8}.ship-note{max-width:760px;margin-top:34px;border:0;border-radius:16px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);padding:22px}.ship-note .chip-icon{background:var(--cp-surface-soft)}.ship-note .icon{stroke:var(--cp-success)}
+.case-intro{grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr);gap:64px;margin-bottom:56px}.case-distinction{padding:20px;border:0;border-radius:14px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border)}.case-distinction strong{color:var(--cp-success)}
+.case-flow{gap:0}.case-stage{grid-template-columns:92px minmax(0,1fr);gap:34px;padding-bottom:72px}.case-stage:not(:last-child)::before{left:45px;background:var(--cp-border-strong)}.stage-marker{width:92px;border:0;border-radius:999px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);font-size:11px;color:var(--cp-text-muted)}.case-stage.is-method .stage-marker{background:var(--cp-text);color:var(--cp-surface)}.stage-kicker,.evidence-label,.outcome-label{font-size:11px;color:var(--cp-success)}.stage-title{font-size:31px;letter-spacing:-.04em;max-width:680px}.stage-copy{font-size:14px;line-height:1.76;max-width:680px}
+.evidence{margin-top:28px;padding:7px;border:0;border-radius:18px;background:var(--cp-surface-soft);box-shadow:0 0 0 1px var(--cp-border),0 20px 50px var(--cp-border);transition:transform 800ms cubic-bezier(.32,.72,0,1)}.evidence:hover{transform:translateY(-4px)}.evidence img{border-radius:12px 12px 4px 4px}.evidence figcaption{margin-top:7px;padding:17px 18px;border:0;border-radius:4px 4px 11px 11px;background:var(--cp-surface)}
+.method-panel{padding:30px;border-radius:16px;background:var(--cp-text);box-shadow:none}.method-tools{font-size:11px;color:var(--cp-success);opacity:1}.method-step{font-size:12px;border-color:var(--cp-border-strong);color:var(--cp-surface)}.method-arrow{color:var(--cp-success)}.method-note{color:var(--cp-border)}.outcome-row{gap:10px;border:0;background:transparent}.outcome-cell{padding:24px;border-radius:14px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border)}.case-transition{margin-top:20px;padding-top:34px}.case-transition p{font-size:20px;line-height:1.5}
+.cap-grid,.proj-grid{gap:10px;border:0;background:transparent;margin:34px 0}.cap-tile,.proj-cell{padding:24px;border-radius:16px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);transition:transform 700ms cubic-bezier(.32,.72,0,1)}.cap-tile:hover,.proj-cell:hover{transform:translateY(-4px)}.cap-tile .chip-icon,.proj-cell .chip-icon{background:var(--cp-surface-soft);border:0}.cap-tile .icon,.proj-cell .icon{stroke:var(--cp-success)}.rb{border-radius:999px;background:var(--cp-surface-soft)!important;color:var(--cp-text-muted)!important;border:0!important;font-size:11px}.rb-live,.rb-code{color:var(--cp-success)!important}
+.k-chips{gap:10px;margin:32px 0}.k-chip{border:0;border-radius:14px;background:var(--cp-surface);box-shadow:0 0 0 1px var(--cp-border);padding:18px}.k-chip .chip-icon{border:0;background:var(--cp-surface-soft)}.k-chip .icon{stroke:var(--cp-success)}
+.close{padding:120px 0 32px}.close-quote{font-size:clamp(34px,4.8vw,56px);line-height:1.08;letter-spacing:-.05em;max-width:900px}.close-quote em{color:var(--cp-success)}footer{padding:36px 48px;margin-top:70px}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 900ms cubic-bezier(.32,.72,0,1),transform 900ms cubic-bezier(.32,.72,0,1)}.reveal.is-visible{opacity:1;transform:translateY(0)}
+@media (max-width:880px){.nav-links{display:none}.cover-inner{grid-template-columns:1fr;gap:24px}.cover-cta{grid-column:1;margin:0}.tag-row{grid-column:1;grid-template-columns:repeat(2,max-content);margin-top:38px}.chapter-inner{grid-template-columns:1fr}.chapter-index{position:static}.cols-2,.cap-grid,.proj-grid,.case-intro,.outcome-row{grid-template-columns:1fr}.phase-strip{grid-template-columns:1fr 1.25fr}.phase-card:nth-child(2){min-height:360px}.case-stage{grid-template-columns:76px minmax(0,1fr);gap:18px}.case-stage:not(:last-child)::before{left:37px}.stage-marker{width:max-content;min-width:110px;white-space:nowrap;padding:0 14px;}.evidence figcaption{grid-template-columns:1fr}}
+@media (max-width:767px){nav{top:12px;width:calc(100% - 24px)}.cover{min-height:100dvh;padding:120px 0 72px}.cover-inner,.w{padding-left:18px;padding-right:18px}.cover-h1{font-size:48px}.cover-label{grid-column:1}.tag-row{grid-template-columns:1fr 1fr;width:100%}.tag{white-space:normal}.chapter{padding:84px 0 0}.chapter-inner{gap:24px}.chapter-num{font-size:56px}.chapter-title{font-size:39px}.chapter-divider{margin-top:68px}.loop-row{grid-template-columns:1fr}.loop-arrow{transform:rotate(90deg);justify-self:center}.phase-strip{grid-template-columns:1fr}.phase-card,.phase-card:nth-child(2){min-height:280px;padding:24px 20px}.case-stage{grid-template-columns:1fr;padding-bottom:58px}.case-stage:not(:last-child)::before{display:none}.stage-marker{width:max-content;padding:0 13px}.stage-title{font-size:28px}.cap-tile,.proj-cell{min-height:0}.close{padding-top:92px}footer{padding:30px 18px;gap:16px;align-items:flex-start;flex-direction:column}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal,.reveal.is-visible,.phase-card,.evidence,.cap-tile,.proj-cell,.nav-links a,.cover-cta,.cover-cta span{opacity:1;transform:none;transition:none}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/shell.css?v=3">
+<link rel="stylesheet" href="../assets/harmonize.css?v=3">
+<style>/* portfolio header replaces the original fixed nav */html{scroll-padding-top:100px}html[data-theme="dark"]{--cp-bg:#1c1b19;--cp-bg-elevated:#151412;--cp-surface:#1f1d1a;--cp-surface-soft:#252320;--cp-border:#2f2c28;--cp-border-strong:#4a4640;--cp-panel:rgba(31,29,26,.72);--cp-panel-strong:rgba(31,29,26,.96);--cp-overlay:rgba(21,20,18,.88)}.cover{min-height:calc(100dvh - 84px)!important;padding-top:clamp(56px,7vw,96px)!important}</style>
+</head>
+<body class="pf-body pf-ai">
+<!-- ===== Portfolio shell (assets/shell.css) ===== -->
+<button class="pf pf-rail pf-rail-l" id="pfRailL" data-pf-contact aria-label="Get in touch"><span id="pfRailLabel">Get in touch</span></button>
+<div class="pf pf-rail pf-rail-r">
+  <button class="pf-icon pf-plus" data-pf-menu aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/></svg></button>
+  <button class="pf-icon" data-theme-toggle aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+</div>
+<div class="pf pf-header" role="banner">
+  <div class="pf-nav">
+    <div class="pf-left"><a class="pf-icon pf-back" href="../index.html#work" aria-label="Back to work" title="Back to work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a><a href="../index.html" class="pf-brand">Suraj</a></div>
+    <div class="pf-links" role="navigation" aria-label="Main">
+      <a href="../about.html">About</a><a href="../index.html#work" aria-current="page">Work</a><a href="../index.html#experience">Experience</a><a href="../index.html#articles">Articles</a><a href="#" data-pf-contact>Contact</a>
+    </div>
+    <div class="pf-end">
+      <span class="pf-clock" id="pfClock">Kodagu, Karnataka<b>✳</b>--:--</span>
+      <button class="pf-icon pf-mobile" data-theme-toggle aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+      <button class="pf-icon pf-plus pf-mobile" data-pf-menu aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg></button>
+    </div>
+  </div>
+</div>
+<!-- ===== Original project document ===== -->
+
+
+
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">Personal Methodology &middot; Product Design &middot; 2026</div>
+    <h1 class="cover-h1">An AI&#8209;Assisted <em>Design Workflow</em></h1>
+    <p class="cover-p">The method behind everything I've shipped recently - AI as a continuous critic, not a generator, questioning and validating at every stage so ambiguity gets argued out before engineering ever sees it.</p>
+    <a class="cover-cta" href="#rate-card">View worked example <span aria-hidden="true">&darr;</span></a>
+    <div class="tag-row">
+      <div class="tag"><span class="dot" style="background:var(--cp-text);"></span>Last Mile</div>
+      <div class="tag"><span class="dot" style="background:var(--cp-success);"></span>Mid Mile Loading</div>
+      <div class="tag"><span class="dot" style="background:var(--cp-success);"></span>Carrier Allocation</div>
+      <div class="tag"><span class="dot" style="background:var(--cp-success);"></span>Rate Card Revamp</div>
+      <div class="tag"><span class="dot" style="background:var(--cp-text-muted);"></span>Rate Card Calculation</div>
+      <div class="tag"><span class="dot" style="background:var(--cp-border-strong);"></span>Exception Management</div>
+      <div class="tag"><span class="dot" style="background:var(--cp-text-muted);"></span>Design System</div>
+    </div>
+  </div>
+</div>
+
+<div class="w">
+<div class="chapter" id="philosophy">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">01</div><div class="chapter-tag">Philosophy</div></div>
+    <div>
+      <h2 class="chapter-title">AI doesn't replace my thinking. It <em>strengthens</em> it.</h2>
+      <p class="chapter-lead">A companion, not a generator - the one rule this method doesn't bend on.</p>
+      <p class="body-p">I don't ask AI to design a screen. I ask it to argue with the one I've already drafted - before I present anything to a PM, I run their brief past it first, not for an answer but for pushback.</p>
+      <div class="loop-row">
+        <div class="loop-node"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div><div class="loop-node-label">I think</div></div>
+        <div class="loop-arrow">&rarr;</div>
+        <div class="loop-node"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-1.9 5.4L21 21l-4.3-1.1a8.5 8.5 0 11-5.7-14.9 8.5 8.5 0 0110 6.5z"/></svg></div><div class="loop-node-label">AI critiques</div></div>
+        <div class="loop-arrow">&rarr;</div>
+        <div class="loop-node"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="loop-node-label">I decide</div></div>
+      </div>
+      <div class="pull"><p>&ldquo;A standing critic - consulted before the meeting, during the exploration, and again before anything ships.&rdquo;</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="why">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">02</div><div class="chapter-tag">Motivation</div></div>
+    <div>
+      <h2 class="chapter-title">Why the old pipeline stopped being <em>enough.</em></h2>
+      <p class="chapter-lead">Not broken. Just leaving too much on the table, too late to fix cheaply.</p>
+      <div class="cols-2">
+        <div class="ic-panel before">
+          <div class="ic-heading"><div class="ic-heading-dot"></div>Traditional pipeline</div>
+          <div class="ic-item"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div class="ic-text"><strong>Validation at the end</strong>Feedback arrives after the decision.</div></div>
+          <div class="ic-item"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="ic-text"><strong>Figma as source of truth</strong>Reinterpreted once it hits code.</div></div>
+          <div class="ic-item"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div><div class="ic-text"><strong>Edge cases found late</strong>In QA, sometimes after release.</div></div>
+        </div>
+        <div class="ic-panel after">
+          <div class="ic-heading"><div class="ic-heading-dot"></div>This method</div>
+          <div class="ic-item"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-1.9 5.4L21 21l-4.3-1.1a8.5 8.5 0 11-5.7-14.9 8.5 8.5 0 0110 6.5z"/></svg></div><div class="ic-text"><strong>Validation throughout</strong>Critique before, during, after.</div></div>
+          <div class="ic-item"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="ic-text"><strong>Code as the design surface</strong>Where the project allows it - Figma stays a reference.</div></div>
+          <div class="ic-item"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="ic-text"><strong>Edge cases found early</strong>Checked against the data model upfront.</div></div>
+        </div>
+      </div>
+      <div class="callout callout-needed"><div class="co-label">Worked example</div><div class="co-body">The Rate Card example below shows how this changed in practice: from an implementation that was difficult to modify to a workflow where design decisions could be tested against working code.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="workflow">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">03</div><div class="chapter-tag">The Workflow</div></div>
+    <div>
+      <h2 class="chapter-title">Fourteen checkpoints, four <em>phases.</em></h2>
+      <p class="chapter-lead">The same pipeline runs underneath every project on the cover - only the subject and the build surface change.</p>
+      <div class="phase-strip">
+        <div class="phase-card p-think">
+          <div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a6 6 0 00-4 10.5c.5.5 1 1.3 1 2.5h6c0-1.2.5-2 1-2.5A6 6 0 0012 2z"/></svg></div>
+          <div class="phase-eyebrow">Phase 01</div>
+          <div class="phase-name">Think</div>
+          <div class="phase-stages">Business Problem<br>Requirement Analysis<br>Discussion with AI</div>
+        </div>
+        <div class="phase-card p-explore">
+          <div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <div class="phase-eyebrow">Phase 02</div>
+          <div class="phase-name">Explore</div>
+          <div class="phase-stages">Research &middot; Brainstorming<br>Information Architecture<br>UX Exploration</div>
+        </div>
+        <div class="phase-card p-validate">
+          <div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 9h13M8 15h13M3 9h.01M3 15h.01"/></svg></div>
+          <div class="phase-eyebrow">Phase 03</div>
+          <div class="phase-name">Validate</div>
+          <div class="phase-stages">UX Critique<br>Edge Case Validation<br>Design Principle Validation</div>
+        </div>
+        <div class="phase-card p-ship">
+          <div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div class="phase-eyebrow">Phase 04</div>
+          <div class="phase-name">Ship</div>
+          <div class="phase-stages">Production-Ready Surface<br>Engineering Review<br>Developer Handoff</div>
+        </div>
+      </div>
+      <div class="ship-note">
+        <div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div>
+        <div class="ship-note-text"><strong>Phase 04 isn't one-size-fits-all.</strong> Where a project already has an established, Figma-built interaction layer, the build stays there - AI still shapes the research, structure, and critique in Phases 01&ndash;03, but the production surface stays Figma. Where a project has room to be built from scratch, that same validated work moves straight into code. Same method, two build tracks - see the project list below for which is which.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="rate-card">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">04</div><div class="chapter-tag">Worked Example</div></div>
+    <div>
+      <div class="case-intro">
+        <div>
+          <h2 class="chapter-title">Rate Card: where the workflow became <em>tangible.</em></h2>
+          <p class="chapter-lead">Not a conventional product case study. This is evidence of how the work moved from an inherited, difficult-to-change implementation to Rate AI—and how my design-to-implementation loop changed along the way.</p>
+        </div>
+      </div>
+
+      <div class="case-flow">
+        <article class="case-stage">
+          <div class="stage-marker">Legacy code</div>
+          <div class="stage-content">
+            <div class="stage-kicker">Starting constraint</div>
+            <h3 class="stage-title">An operational product that felt untouchable</h3>
+            <p class="stage-copy">The existing Rate Card experience predated my involvement. Its implementation was difficult to modify, while the workflow remained largely manual. The problem was not simply to refresh the interface; it was to create a credible path from legacy software to a product that could evolve.</p>
+            <figure class="evidence">
+              <img src="../images/work/ai-assisted-workflow/01-legacy-rate-card.jpg" alt="Legacy Rate Card interface showing dense filters, actions, and rate-card records in the existing operational product." loading="lazy">
+              <figcaption><span class="evidence-label">Evidence 01 · Baseline</span><span>Use this screenshot to establish the inherited constraint: a functioning but rigid operational interface, not a blank canvas or a greenfield redesign.</span></figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="case-stage">
+          <div class="stage-marker">Phase 1</div>
+          <div class="stage-content">
+            <div class="stage-kicker">Legacy → modernised operations</div>
+            <h3 class="stage-title">Designing against the real implementation</h3>
+            <p class="stage-copy">The first phase modernised the operational experience and addressed immediate product problems. It was still a manual Rate Card workflow—there was no Rate AI or agent experience. The important shift happened in how I worked: VS Code and Claude Code let me explore, modify, run, and test ideas closer to the existing product instead of designing a separate idealised surface.</p>
+            <figure class="evidence">
+              <img src="../images/work/ai-assisted-workflow/02-vscode-claude-code.jpg" alt="VS Code with Rate Card interface code and Claude Code running the product locally for implementation-level design iteration." loading="lazy">
+              <figcaption><span class="evidence-label">Evidence 02 · Working method</span><span>Use this screenshot to show the design surface changing: code, local preview, and AI-assisted implementation in one working environment. It documents the loop, not the final UI.</span></figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="case-stage">
+          <div class="stage-marker">Output</div>
+          <div class="stage-content">
+            <div class="stage-kicker">Design delivery &rarr; manual-operation handover</div>
+            <h3 class="stage-title">What Phase 1 actually delivered</h3>
+            <p class="stage-copy">Phase 1 closed with a modernised, manual-operation Rate Card product handed over as the working baseline &mdash; before Rate AI, FarEye's Pilot AI product, entered the picture. This was the deliverable Phase 2's Rate AI work would later build on top of.</p>
+            <figure class="evidence">
+              <img src="../images/work/ai-assisted-workflow/03-phase1-party-view.jpg" alt="Party view screen from the modernised Rate Card product, listing 200 parties with status, rate card name, and type, delivered as the Phase 1 manual-operation handover." loading="lazy">
+              <figcaption><span class="evidence-label">Evidence 03 &middot; Phase 1 handover</span><span>Use this screenshot to mark the Phase 1 boundary: a complete, modernised Party View handed over as a manual-operation product, before Rate AI &mdash; FarEye's Pilot AI product &mdash; entered the picture.</span></figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="case-stage is-method">
+          <div class="stage-marker">The loop</div>
+          <div class="stage-content">
+            <div class="stage-kicker">AI-assisted design + implementation</div>
+            <h3 class="stage-title">The handoff became a continuous feedback loop</h3>
+            <p class="stage-copy">Product thinking, UX decisions, code-level experiments, and implementation validation stopped happening as separate blocks. Each pass could expose constraints and edge cases early enough to influence the next design decision.</p>
+            <div class="method-panel">
+              <div class="method-tools">Working surface · VS Code + Claude Code + local product</div>
+              <div class="method-loop" aria-label="AI-assisted design and implementation loop">
+                <span class="method-step">Understand</span><span class="method-arrow">→</span>
+                <span class="method-step">Explore</span><span class="method-arrow">→</span>
+                <span class="method-step">Design</span><span class="method-arrow">→</span>
+                <span class="method-step">Prototype</span><span class="method-arrow">→</span>
+                <span class="method-step">Implement</span><span class="method-arrow">→</span>
+                <span class="method-step">Validate</span><span class="method-arrow">→</span>
+                <span class="method-step">Iterate</span>
+              </div>
+              <p class="method-note">AI supported the work between these steps—helping inspect the implementation, test alternatives, surface issues, and shorten the distance between an interaction decision and evidence from working software.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="case-stage">
+          <div class="stage-marker">Phase 2</div>
+          <div class="stage-content">
+            <div class="stage-kicker">Modernised operations → Rate AI</div>
+            <h3 class="stage-title">The product became AI-assisted too</h3>
+            <p class="stage-copy">The second phase introduced Rate AI Product design. The same close design-and-code workflow now supported a larger product shift: moving beyond manual configuration toward an experience where AI could help people inspect, resolve, and act on rate information. This was the point where AI-assisted delivery and an AI-enabled product became visible together—without being the same thing.</p>
+            <figure class="evidence">
+              <img src="../images/work/ai-assisted-workflow/04-rate-ai.jpg" alt="Rate AI concepts running in VS Code, including rate-card management, an AI assistant panel, and AI-supported operational issue resolution." loading="lazy">
+              <figcaption><span class="evidence-label">Evidence 04 · Product evolution</span><span>Use this screenshot to show the step change: the modernised operational foundation now supports Rate AI concepts, while the visible VS Code environment keeps the implementation workflow part of the evidence.</span></figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="case-stage">
+          <div class="stage-marker">Outcome</div>
+          <div class="stage-content">
+            <div class="stage-kicker">What changed</div>
+            <h3 class="stage-title">A more intelligent product—and a tighter way of making it</h3>
+            <p class="stage-copy">The outcome was not one redesign. It was a sequence: first, a modernised Rate Card experience; then, Rate AI. Just as importantly, the project established a repeatable way to move between design intent, implementation reality, and validation without waiting for a formal handoff at every turn.</p>
+            <div class="outcome-row">
+              <div class="outcome-cell"><div class="outcome-label">Product capability</div><p>Legacy Rate Card → modernised operational workflow → Rate AI.</p></div>
+              <div class="outcome-cell"><div class="outcome-label">Workflow capability</div><p>Design ↔ code ↔ local validation became a continuous loop rather than three separate stages.</p></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="capabilities">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">05</div><div class="chapter-tag">Capabilities</div></div>
+    <div>
+      <h2 class="chapter-title">Not tools. Ways of <em>thinking.</em></h2>
+      <p class="chapter-lead">What AI is actually strengthening, at each checkpoint above.</p>
+      <div class="cap-grid">
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 4h6a1 1 0 011 1v1H8V5a1 1 0 011-1z"/><rect x="5" y="6" width="14" height="16" rx="2"/><path d="M9 12h6M9 16h4"/></svg></div><div class="cap-name">Requirement Analysis</div><div class="cap-line">Finds ambiguity before a screen exists.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><div class="cap-name">Research</div><div class="cap-line">Widens the field before it narrows.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a6 6 0 00-4 10.5c.5.5 1 1.3 1 2.5h6c0-1.2.5-2 1-2.5A6 6 0 0012 2z"/></svg></div><div class="cap-name">Brainstorming</div><div class="cap-line">Generates directions, never final answers.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 9h13M8 15h13M3 9h.01M3 15h.01"/></svg></div><div class="cap-name">UX Critique</div><div class="cap-line">Challenges every decision, like a second designer.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div><div class="cap-name">Edge Cases</div><div class="cap-line">Finds what the happy path quietly skips.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><div class="cap-name">Design Principles</div><div class="cap-line">Checks against a standard, not a feeling.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="cap-name">PM Preparation</div><div class="cap-line">Rehearses hard questions before the meeting.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="cap-name">Engineering Readiness</div><div class="cap-line">Turns a decision into working UI, not a spec.</div></div>
+        <div class="cap-tile"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M21 6H8a5 5 0 000 10h1M7 22l-4-4 4-4M3 18h13a5 5 0 000-10h-1"/></svg></div><div class="cap-name">Developer Handoff</div><div class="cap-line">Packaged to be integrated, not reinterpreted.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="projects">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">06</div><div class="chapter-tag">Applied To</div></div>
+    <div>
+      <h2 class="chapter-title">AI&#8209;assisted workflow <em>across various projects.</em></h2>
+      <p class="chapter-lead">Not built for a single redesign and retired afterward - and not every project ships the same way. &ldquo;Build track&rdquo; below shows which projects continue in Figma versus move fully into code, per the note in Section 03.</p>
+      <div class="proj-grid">
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="proj-name">Last Mile</div><div class="proj-line">Last-mile delivery workflows for field staff.</div></div>
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 8V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h4"/><path d="M13 22v-6a2 2 0 012-2h6"/></svg></div><div class="proj-name">Mid Mile Loading</div><div class="proj-line">Hub-floor loading &amp; exception capture.</div></div>
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="proj-name">Carrier Allocation</div><div class="proj-line">Enterprise allocation logic, rebuilt.</div></div>
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83A2 2 0 009.59 3.24L3 3v6.59a2 2 0 00.59 1.41l9.58 9.58a2 2 0 002.82 0l4.6-4.6a2 2 0 000-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></div><div class="proj-name">Rate Card Revamp</div><div class="proj-line">Legacy rate management modernised, then extended into Rate AI.</div></div>
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="10" y2="11"/><line x1="13" y1="11" x2="15" y2="11"/></svg></div><div class="proj-name">Rate Card Calculation</div><div class="proj-line">Calculation logic &amp; input validation.</div></div>
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4.93 4.93l14.14 14.14M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div><div class="proj-name">Exception Management</div><div class="proj-line">Handling failure &amp; deviation states.</div></div>
+        <div class="proj-cell"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><div class="proj-name">Design System</div><div class="proj-line">The component &amp; token base other projects build on.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="knowledge">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">07</div><div class="chapter-tag">Knowledge System</div></div>
+    <div>
+      <h2 class="chapter-title">AI is only as good as what it can <em>reference.</em></h2>
+      <p class="chapter-lead">The workflow only holds together because of a second thing, built alongside it.</p>
+      <p class="body-p">Every critique above draws on a reusable base - not a blank slate - so each new review starts from an already-validated baseline instead of zero.</p>
+      <div class="k-chips">
+        <div class="k-chip"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a6 6 0 00-4 10.5c.5.5 1 1.3 1 2.5h6c0-1.2.5-2 1-2.5A6 6 0 0012 2z"/></svg></div><div class="k-chip-label">Heuristics &amp; Principles</div></div>
+        <div class="k-chip"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><div class="k-chip-label">Component &amp; Design System</div></div>
+        <div class="k-chip"><div class="chip-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="k-chip-label">Prompt &amp; Review Library</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+</div>
+
+<div class="close">
+  <div class="w">
+    <p class="close-quote">I have built an AI&#8209;assisted design workflow that helps me <em>think better,</em> validate faster, and deliver <em>implementation&#8209;ready</em> products.</p>
+  </div>
+</div>
+
+<footer>
+  <div><div class="fl">D Suraj &middot; Personal Methodology &middot; 2026</div></div>
+  <div class="fbrand">Design Workflow</div>
+</footer>
+
+<script>
+  const revealTargets = document.querySelectorAll(
+    ".chapter, .case-stage, .cap-tile, .proj-cell, .close-quote"
+  );
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    revealTargets.forEach((target) => target.classList.add("is-visible"));
+  } else {
+    revealTargets.forEach((target) => target.classList.add("reveal"));
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+    revealTargets.forEach((target) => revealObserver.observe(target));
+  }
+
+  const navSectionLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const navSections = navSectionLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  const setActiveSection = (sectionId) => {
+    navSectionLinks.forEach((link) => {
+      const isActive = link.getAttribute("href") === `#${sectionId}`;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      const current = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (current) setActiveSection(current.target.id);
+    },
+    { rootMargin: "-28% 0px -62% 0px", threshold: 0 }
+  );
+
+  navSections.forEach((section) => sectionObserver.observe(section));
+  navSectionLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      setActiveSection(link.getAttribute("href").slice(1));
+    });
+  });
+</script>
+
+<!-- ===== Portfolio shell ===== -->
+<div class="pf pf-more"><div class="pf-mhead"><h2>More work</h2><span></span><a href="../index.html#work">All work</a></div><div class="pf-mgrid"><a class="pf-card" href="rate-calculation-logic-builder.html"><div class="pf-thumb"><img src="../images/projects/rate-calculation-logic-builder.png" alt="" loading="lazy"></div><h3>Rate Calculation Logic Builder<span>Enterprise web, 2026</span></h3><p>A visual builder for configuring rate calculation logic across shipments.</p></a><a class="pf-card" href="mid-mile-preload-app.html"><div class="pf-thumb"><img src="../images/projects/mid-mile-preload-app.png" alt="" loading="lazy"></div><h3>Mid-Mile Preload App<span>Mobile app, 2026</span></h3><p>A warehouse loading flow for FarEye's Pilot app, from pending vehicles to item scanning.</p></a></div></div>
+<div class="pf pf-footer" id="pfContact" role="contentinfo">
+  <p class="pf-tag">Digital Product Designer &nbsp;|&nbsp; Enterprise B2B SaaS</p>
+  <a class="pf-mail" href="mailto:surajdm23@gmail.com">surajdm23@gmail.com</a><br>
+  <button class="pf-ghost" data-pf-copy>Copy email</button>
+  <div class="pf-foot">
+    <div class="pf-cols">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#experience">Resume</a></li><li><a href="../index.html#testimonials">Testimonials</a></li><li><a href="../index.html#articles">Articles</a></li></ul>
+      <ul><li><a href="https://www.linkedin.com/in/surajdm23/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li><li><a href="https://medium.com/@surajdm23" target="_blank" rel="noopener noreferrer">Medium</a></li><li><a href="https://www.behance.net/surajdsuraj" target="_blank" rel="noopener noreferrer">Behance</a></li></ul>
+    </div>
+    <small>© <span id="pfYear"></span> Suraj</small>
+  </div>
+</div>
+<div class="pf pf-scrim" id="pfScrim"></div>
+<div class="pf pf-menu" id="pfMenu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="pf-mtop"><strong>Suraj</strong><button class="pf-close" data-pf-close aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
+  <div class="pf-mlinks" role="navigation"><a href="../index.html">Home</a><a href="../about.html">About</a><a href="../index.html#services">Services</a><a href="../index.html#work">Work</a><a href="../index.html#experience">Experience</a><a href="../index.html#articles">Articles</a><a href="#" data-pf-contact>Contact</a></div>
+  <p class="pf-mfoot">Digital Product Designer &nbsp;|&nbsp; Enterprise B2B SaaS</p>
+</div>
+<div class="pf pf-drawer" id="pfDrawer" role="dialog" aria-modal="true" aria-label="Contact">
+  <div class="pf-dtop">
+    <div class="pf-socials"><a href="https://www.linkedin.com/in/surajdm23/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://medium.com/@surajdm23" target="_blank" rel="noopener noreferrer">Medium</a><a href="https://www.behance.net/surajdsuraj" target="_blank" rel="noopener noreferrer">Behance</a></div>
+    <button class="pf-close" data-pf-close aria-label="Close contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div>
+    <a class="pf-mail" href="mailto:surajdm23@gmail.com">surajdm23@gmail.com</a>
+    <p>Tell me a little about what you're building, your timeline and where you need help. I usually reply within two working days.</p>
+    <div class="pf-drow"><button class="pf-ghost" data-pf-copy>Copy email</button><a class="pf-ghost pf-drow-dl" href="../pdf/Daddera%20Suraj%20S%20-%20Resume.pdf" download="Daddera-Suraj-S-Resume.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CV</a></div>
+  </div>
+</div>
+<div class="pf pf-cursor" id="pfCursor" aria-hidden="true"></div>
+<script src="../assets/shell.js?v=3"></script>
+</body>
+</html>

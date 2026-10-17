@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mid-Mile Pre-Load App — Suraj</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'light'}catch(e){document.documentElement.dataset.theme='light'}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+:root{--display:"Segoe UI Variable Display","Segoe UI",Aptos,Calibri,sans-serif;--body:"Segoe UI Variable Text","Segoe UI",Aptos,Calibri,sans-serif;--mono:Consolas,"Courier New",Courier,monospace;}
+body{font-family:var(--body);background:var(--white);color:var(--ink);-webkit-font-smoothing:antialiased;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);display:flex;align-items:center;padding:0 48px;gap:40px;}
+.nav-brand{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink);}.nav-brand span{color:var(--red);}
+.nav-links{display:flex;gap:28px;margin-left:auto;}.nav-links a{font-size:12px;font-weight:500;color:var(--ink-3);text-decoration:none;letter-spacing:.02em;text-transform:uppercase;}.nav-links a:hover{color:var(--ink);}
+.cover{padding:120px 0 100px;border-bottom:1px solid var(--rule);margin-top:52px;}
+.cover-inner{max-width:1200px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:center;}
+.cover-label{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}.cover-label::before{content:'';display:block;width:24px;height:1px;background:var(--red);}
+.cover-h1{font-family:var(--display);font-weight:800;font-size:68px;line-height:.95;letter-spacing:-3px;color:var(--ink);margin-bottom:20px;}.cover-h1 em{font-style:normal;font-weight:900;color:var(--red);}
+.cover-p{font-size:16px;font-weight:300;line-height:1.75;color:var(--ink-2);max-width:440px;}
+.cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.cover-meta-cell{background:var(--white);padding:20px 22px;}.cover-meta-label{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}.cover-meta-value{font-size:13px;font-weight:500;color:var(--ink);line-height:1.4;}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--ink);border-radius:0 0 12px 12px;overflow:hidden;}.cover-stat{padding:24px;border-right:1px solid var(--rule);}.cover-stat:last-child{border-right:none;}
+.stat-num{font-family:var(--display);font-weight:900;font-size:36px;line-height:1;letter-spacing:-2px;color:#fff;}.stat-num sup{font-size:18px;color:rgba(255,255,255,.45);}.stat-lbl{font-size:12px;color:rgba(255,255,255,.55);margin-top:5px;line-height:1.4;}
+.w{max-width:1200px;margin:0 auto;padding:0 32px;}
+.chapter{padding:72px 0 0;}.chapter-inner{display:grid;grid-template-columns:140px 1fr;gap:60px;align-items:start;}
+.chapter-index{position:sticky;top:72px;}.chapter-num{font-family:var(--display);font-weight:900;font-size:90px;line-height:1;letter-spacing:-5px;color:var(--rule);user-select:none;}.chapter-tag{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.12em;text-transform:uppercase;margin-top:6px;}
+.chapter-title{font-family:var(--display);font-weight:800;font-size:42px;line-height:1.05;letter-spacing:-2px;color:var(--ink);margin-bottom:16px;}.chapter-title em{font-style:normal;font-weight:900;color:var(--red);}
+.chapter-lead{font-size:16px;font-weight:300;line-height:1.75;color:var(--ink-2);margin-bottom:48px;max-width:580px;}
+.chapter-divider{height:1px;background:var(--rule);margin:72px 0 0;}
+.pull{border-left:3px solid var(--red);padding:20px 28px;margin:40px 0;}.pull p{font-family:var(--display);font-weight:700;font-size:20px;font-weight:700;font-style:italic;line-height:1.5;color:var(--ink);}.pull-source{font-family:var(--mono);font-size:11px;color:var(--ink-4);letter-spacing:.08em;text-transform:uppercase;margin-top:10px;}
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin:32px 0;}.cols-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin:32px 0;}
+p{font-size:14px;line-height:1.75;color:var(--ink-2);}
+h4{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
+.ic-panel{padding:28px 24px;background:var(--white);border:1px solid var(--rule);}.ic-panel.before{}.ic-panel.after{border-left:none;}
+.ic-heading{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:8px;}.ic-heading-dot{width:8px;height:8px;border-radius:50%;}
+.ic-panel.before .ic-heading{color:var(--err);}.ic-panel.before .ic-heading-dot{background:var(--err);}
+.ic-panel.after .ic-heading{color:var(--ok);}.ic-panel.after .ic-heading-dot{background:var(--ok);}
+.ic-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.07);}.ic-item:last-child{border-bottom:none;}
+.ic-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ic-panel.before .ic-icon{background:transparent;}.ic-panel.before .ic-icon svg{stroke:var(--err);}
+.ic-panel.after .ic-icon{background:transparent;}.ic-panel.after .ic-icon svg{stroke:var(--ok);}
+.ic-icon svg{width:20px;height:20px;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ic-label{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}.ic-desc{font-size:13px;color:var(--ink-2);line-height:1.65;}
+.nom-strip{display:flex;margin:32px 0;margin-left:-200px;width:calc(100% + 200px);}
+.nom-step{flex:1;padding:24px 20px;position:relative;}.nom-step::after{content:'\2192';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,.4);z-index:1;}.nom-step:last-child::after{display:none;}
+.nom-step:nth-child(1){background:#111317;}.nom-step:nth-child(2){background:#1D4ED8;}.nom-step:nth-child(3){background:#7C3AED;}.nom-step:nth-child(4){background:#00A23D;}
+.nom-num{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.nom-name{font-family:var(--display);font-size:24px;letter-spacing:-1px;color:#fff;margin-bottom:6px;}
+.nom-example{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.55);}.nom-desc{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;line-height:1.6;}
+.nom-ref{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:2px;align-items:start;margin-left:-200px;width:calc(100% + 200px);}
+.nrc{background:var(--surf);}
+.nrc-bar{height:4px;}
+.nom-ref .nrc:nth-child(1) .nrc-bar{background:#111317;}
+.nom-ref .nrc:nth-child(2) .nrc-bar{background:#1D4ED8;}
+.nom-ref .nrc:nth-child(3) .nrc-bar{background:#7C3AED;}
+.nom-ref .nrc:nth-child(4) .nrc-bar{background:#00A23D;}
+.nrc-label{font-family:var(--mono);font-size:9px;color:var(--ink-4);letter-spacing:.1em;text-transform:uppercase;padding:16px 14px 0;}
+.nrc-img{padding:12px 14px 20px;}
+.nrc-img img{width:100%;display:block;border-radius:10px;border:1px solid var(--rule);box-shadow:0 4px 14px rgba(0,0,0,.06);}
+.nrc-empty{margin:12px 14px 20px;height:160px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--rule);border-radius:10px;font-size:11px;color:var(--ink-4);padding:0 16px;}
+.se-stack{display:grid;grid-template-columns:1fr 2fr;gap:40px;padding:48px;border-top:1px solid var(--rule);align-items:start;max-width:1200px;margin:0 auto;}
+.snum{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.sdot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);}
+.stitle{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-1px;color:var(--ink);margin-bottom:8px;line-height:1.1;}
+.sdesc{font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:14px;}
+.sdb{margin-top:10px;}.sdl{font-family:var(--mono);font-size:9px;color:var(--ink-4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}.sdt{font-size:13px;color:var(--ink-2);line-height:1.6;}
+.img-full{border-radius:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.12);border:1px solid var(--rule);}.img-full img{width:100%;display:block;}
+.exc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:32px 0;}
+.exc-cell{padding:32px;}.exc-cell:nth-child(1){background:var(--ok-lt);}.exc-cell:nth-child(2){background:var(--warn-lt);}.exc-cell:nth-child(3){background:var(--err-lt);}.exc-cell:nth-child(4){background:var(--surf);}
+.exc-num{font-family:var(--display);font-size:56px;line-height:1;letter-spacing:-3px;margin-bottom:12px;}
+.exc-cell:nth-child(1) .exc-num{color:var(--ok);}.exc-cell:nth-child(2) .exc-num{color:var(--warn);}.exc-cell:nth-child(3) .exc-num{color:var(--err);}.exc-cell:nth-child(4) .exc-num{color:var(--ink-3);}
+.exc-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;}.exc-desc{font-size:13px;color:var(--ink-2);line-height:1.65;}.exc-rule{font-family:var(--mono);font-size:10px;margin-top:10px;}
+.exc-cell:nth-child(1) .exc-rule{color:var(--ok);}.exc-cell:nth-child(2) .exc-rule{color:var(--warn);}.exc-cell:nth-child(3) .exc-rule{color:var(--err);}.exc-cell:nth-child(4) .exc-rule{color:var(--ink-3);}
+.rl{margin:32px 0;}.ri{display:grid;grid-template-columns:170px 1fr 110px;gap:28px;padding:22px 0;border-top:1px solid var(--rule);align-items:start;}.ri:last-child{border-bottom:1px solid var(--rule);}
+.rn{font-size:13px;font-weight:600;color:var(--ink);line-height:1.4;}.rd{font-size:14px;color:var(--ink-2);line-height:1.7;}.re{text-align:right;}
+.rb{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:2px;display:inline-block;}
+.rb-srv{background:var(--blue-lt);color:var(--blue);}.rb-ui{background:var(--err-lt);color:var(--err);}.rb-auto{background:var(--ok-lt);color:var(--ok);}.rb-role{background:var(--surf);color:var(--ink-3);border:1px solid var(--rule);}
+.dl{margin:32px 0;}.di{display:grid;grid-template-columns:60px 1fr;gap:32px;padding:40px 0;border-top:1px solid var(--rule);}.di:last-child{border-bottom:1px solid var(--rule);}
+.dn{font-family:var(--display);font-weight:900;font-size:56px;line-height:1;letter-spacing:-3px;color:var(--rule);}
+.dt{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.8px;color:var(--ink);margin-bottom:12px;line-height:1.2;}.db{font-size:15px;color:var(--ink-2);line-height:1.8;}
+footer{border-top:1px solid var(--rule);padding:36px 32px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:60px auto 0;}
+.fl{font-family:var(--mono);font-size:11px;color:var(--ink-4);}.fbrand{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink-3);}
+
+/* Roomify-inspired high-end visual system */
+body{
+  --red:var(--cp-text);
+  --red-lt:color-mix(in srgb,var(--cp-bg) 90%,var(--cp-link));
+  --red-md:color-mix(in srgb,var(--cp-bg) 78%,var(--cp-link));
+  --ink:var(--cp-text);
+  --ink-2:var(--cp-text-muted);
+  --ink-3:var(--cp-text-soft);
+  --ink-4:var(--cp-border-strong);
+  --ink-5:var(--cp-border);
+  --rule:color-mix(in srgb,var(--cp-border) 48%,transparent);
+  --surf:color-mix(in srgb,var(--cp-bg) 94%,var(--cp-link));
+  --white:var(--cp-surface);
+  --ok:var(--cp-text);
+  --ok-lt:color-mix(in srgb,var(--cp-bg) 93%,var(--cp-success));
+  --warn:var(--cp-text);
+  --warn-lt:color-mix(in srgb,var(--cp-bg) 94%,var(--cp-warning));
+  --err:var(--cp-text);
+  --err-lt:color-mix(in srgb,var(--cp-bg) 92%,var(--cp-danger));
+  --blue:var(--cp-text);
+  --blue-lt:color-mix(in srgb,var(--cp-bg) 92%,var(--cp-link));
+  --display:"Segoe UI Variable Display","Segoe UI",Aptos,Calibri,-apple-system,BlinkMacSystemFont,sans-serif;
+  --body:"Segoe UI Variable Text","Segoe UI",Aptos,Calibri,-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:Consolas,"Courier New",Courier,monospace;
+  background:color-mix(in srgb,var(--cp-bg) 97%,var(--cp-link));
+  color:var(--cp-text);
+}
+body::before{background:var(--cp-sheen);content:"";inset:0;opacity:.16;pointer-events:none;position:fixed;z-index:4}
+nav{backdrop-filter:blur(20px);background:var(--cp-panel);border:0;border-radius:9999px;box-shadow:0 0 0 1px var(--cp-sheen),var(--cp-shadow);height:56px;left:50%;max-width:calc(100% - 32px);padding:0 12px 0 22px;right:auto;top:20px;transform:translateX(-50%);width:max-content}
+.nav-brand{color:var(--cp-text);font-size:13px;font-weight:650;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}.nav-brand span{color:var(--cp-text)}
+.nav-links{gap:2px;margin-left:32px}.nav-links a{border-radius:9999px;font-size:9px;font-weight:650;letter-spacing:.08em;padding:10px 12px;transition:background 700ms cubic-bezier(.32,.72,0,1),color 700ms cubic-bezier(.32,.72,0,1)}.nav-links a:hover{background:var(--cp-surface);color:var(--cp-text)}
+.cover{background:color-mix(in srgb,var(--cp-bg) 93%,var(--cp-link));border:0;border-radius:0 0 48px 48px;margin:0 20px;min-height:100dvh;overflow:hidden;padding:clamp(140px,16vw,210px) 0 clamp(90px,11vw,140px);position:relative}
+.cover::before{color:var(--cp-text);content:"PRE-LOAD";font-family:var(--display);font-size:clamp(92px,16vw,246px);font-weight:780;left:-1.8vw;letter-spacing:-.085em;line-height:.72;opacity:.98;position:absolute;right:0;top:118px;white-space:nowrap;z-index:0}
+.cover-inner{align-items:end;gap:clamp(24px,5vw,72px);grid-template-columns:.82fr 1.18fr;max-width:1320px;padding:0 clamp(28px,5vw,72px);position:relative;z-index:1}
+.cover-inner>div:first-child{padding-top:clamp(160px,21vw,280px)}
+.cover-inner>div:last-child{align-self:center!important;margin:-20px -4vw -100px -4vw!important;position:relative;z-index:2}.cover-inner>div:last-child img{filter:grayscale(1) contrast(.92);max-height:720px;object-fit:contain}
+.cover-label{background:var(--cp-surface);border-radius:9999px;color:var(--cp-text);display:inline-flex;font-size:9px;font-weight:650;letter-spacing:.14em;margin-bottom:24px;padding:8px 13px}.cover-label::before{background:var(--cp-text);border-radius:50%;height:6px;width:6px}
+.cover-h1{font-size:clamp(54px,6.7vw,94px);font-weight:690;letter-spacing:-.065em;line-height:.9;margin-bottom:28px;max-width:620px}.cover-h1 em{color:var(--cp-text);font-weight:390}.cover-p{color:var(--cp-text);font-size:clamp(17px,1.6vw,21px);font-weight:420;line-height:1.55;max-width:560px}.cover-p strong{font-weight:660}
+.cover-meta{background:transparent;border:0;gap:8px}.cover-meta-cell{background:var(--cp-panel-strong);border-radius:14px;padding:18px 20px}.cover-meta-label{color:var(--cp-border-strong);font-size:8px}.cover-meta-value{font-size:12px;font-weight:560}
+.cover-stats{background:var(--cp-text);border-radius:28px;margin:-4px auto 0;max-width:1120px;position:relative;z-index:2}.cover-stat{border-color:var(--cp-border-strong);padding:30px}.stat-num{color:var(--cp-bg-elevated);font-size:42px}.stat-num sup,.stat-lbl{color:var(--cp-border-strong)}
+.w{max-width:1240px;padding:0 clamp(24px,5vw,64px)}.chapter{padding:clamp(112px,15vw,184px) 0 0}.chapter-inner{gap:clamp(36px,7vw,96px);grid-template-columns:120px minmax(0,1fr)}
+.chapter-index{top:112px}.chapter-num{color:color-mix(in srgb,var(--cp-border) 54%,var(--cp-link));font-size:clamp(66px,7vw,96px);font-weight:720;letter-spacing:-.07em}.chapter-tag{background:var(--cp-surface);border-radius:9999px;color:var(--cp-text);display:inline-block;font-size:8px;font-weight:650;letter-spacing:.12em;padding:7px 10px}
+.chapter-title{font-size:clamp(42px,5.8vw,76px);font-weight:680;letter-spacing:-.06em;line-height:.98;margin-bottom:24px;max-width:900px}.chapter-title em{color:var(--cp-text);font-weight:390}.chapter-lead{color:var(--cp-text-soft);font-size:clamp(17px,1.6vw,21px);font-weight:420;line-height:1.65;margin-bottom:56px;max-width:720px}
+.chapter-divider{background:var(--rule);margin-top:clamp(84px,11vw,136px)}p{font-size:15px;line-height:1.75}.pull{background:var(--cp-text);border:0;border-radius:24px;margin:52px 0;padding:30px 34px}.pull p{color:var(--cp-bg-elevated);font-size:clamp(20px,2.2vw,29px);font-style:normal;font-weight:520;letter-spacing:-.025em}.pull-source{color:var(--cp-border-strong)}
+.cols-2,.cols-3{gap:18px}.ic-panel{background:var(--cp-surface);border:0;border-radius:26px;box-shadow:0 0 0 7px var(--cp-sheen);padding:30px}.ic-panel.after{background:var(--cp-text)}.ic-panel.after .ic-label,.ic-panel.after .ic-desc{color:var(--cp-bg-elevated)}.ic-panel.after .ic-heading{color:var(--cp-bg-elevated)}.ic-heading{color:var(--cp-text)!important}.ic-heading-dot{background:var(--cp-text)!important}.ic-item{border-color:var(--rule);padding:15px 0}.ic-icon{background:var(--surf)!important;border-radius:14px}.ic-icon svg{stroke:var(--cp-text)!important}
+.nom-strip{display:grid;gap:16px;grid-template-columns:repeat(4,1fr);margin:44px 0;width:auto}.nom-step,.nom-step:nth-child(1),.nom-step:nth-child(2),.nom-step:nth-child(3),.nom-step:nth-child(4){background:var(--cp-surface);border-radius:22px;padding:28px 24px}.nom-step:nth-child(2){background:var(--cp-text)}.nom-step::after{display:none}.nom-num,.nom-example,.nom-desc{color:var(--cp-text-muted)}.nom-name{color:var(--cp-text);font-size:26px}.nom-step:nth-child(2) .nom-num,.nom-step:nth-child(2) .nom-example,.nom-step:nth-child(2) .nom-desc{color:var(--cp-border-strong)}.nom-step:nth-child(2) .nom-name{color:var(--cp-bg-elevated)}
+.nom-ref{background:color-mix(in srgb,var(--cp-bg) 93%,var(--cp-link));border-radius:28px;gap:10px;margin:12px 0 0;padding:16px;width:auto}.nrc{background:var(--cp-panel-strong);border-radius:18px;overflow:hidden}.nrc-bar,.nom-ref .nrc:nth-child(1) .nrc-bar,.nom-ref .nrc:nth-child(2) .nrc-bar,.nom-ref .nrc:nth-child(3) .nrc-bar,.nom-ref .nrc:nth-child(4) .nrc-bar{background:var(--cp-text)}.nrc-img img,.nrc-empty{border:0;border-radius:14px;box-shadow:none}.nrc-img img{filter:grayscale(1)}
+.se-stack{border:0;gap:clamp(32px,6vw,88px);max-width:1240px;padding:clamp(80px,11vw,136px) clamp(24px,5vw,64px)}.snum{color:var(--cp-border-strong)}.sdot{background:var(--cp-text)}.stitle{font-size:clamp(28px,3.2vw,42px);font-weight:670;letter-spacing:-.045em}.sdesc,.sdt{color:var(--cp-text-soft)}.img-full{border:0;border-radius:30px;box-shadow:0 0 0 8px var(--cp-sheen),var(--cp-shadow)}.img-full img{filter:grayscale(1)}
+.exc-grid{background:color-mix(in srgb,var(--cp-bg) 93%,var(--cp-link));border-radius:30px;gap:12px;padding:14px}.exc-cell,.exc-cell:nth-child(1),.exc-cell:nth-child(2),.exc-cell:nth-child(3),.exc-cell:nth-child(4){background:var(--cp-surface);border-radius:20px}.exc-cell:nth-child(2){background:var(--cp-text)}.exc-cell:nth-child(2) .exc-num,.exc-cell:nth-child(2) .exc-name,.exc-cell:nth-child(2) .exc-desc,.exc-cell:nth-child(2) .exc-rule{color:var(--cp-bg-elevated)}.exc-num,.exc-cell:nth-child(1) .exc-num,.exc-cell:nth-child(3) .exc-num,.exc-cell:nth-child(4) .exc-num{color:var(--cp-text)}
+.ri{border-color:var(--rule);grid-template-columns:190px 1fr 120px;padding:26px 0}.rn{font-size:14px}.rd{color:var(--cp-text-soft);font-size:15px}.rb,.rb-srv,.rb-ui,.rb-auto,.rb-role{background:var(--cp-surface);border:0;border-radius:9999px;color:var(--cp-text);padding:6px 9px}
+.di{border-color:var(--rule);grid-template-columns:72px 1fr;padding:48px 0}.dn{color:color-mix(in srgb,var(--cp-border) 54%,var(--cp-link));font-size:64px}.dt{font-size:27px;font-weight:660;letter-spacing:-.04em}.db{color:var(--cp-text-soft)}
+.learning-grid{background:color-mix(in srgb,var(--cp-bg) 93%,var(--cp-link))!important;border:0!important;border-radius:30px!important;gap:12px!important;padding:14px}.learning-card{background:var(--cp-surface)!important;border-radius:20px;padding:28px 22px!important}.learning-card:nth-child(3){background:var(--cp-text)!important}.learning-card:nth-child(3)>div:not(:first-child){color:var(--cp-bg-elevated)!important}.learning-card>div:first-child{background:var(--surf)!important;border-radius:14px!important}.learning-card svg{stroke:var(--cp-text)}
+footer{border:0!important;margin-top:80px!important;padding:88px 24px!important}footer>div:first-child{font-size:clamp(42px,6vw,76px)!important;font-weight:670!important;letter-spacing:-.06em!important}footer>div:last-child{color:var(--cp-text-soft)!important;font-size:13px!important}
+.reveal{opacity:0;transform:translateY(52px);transition:opacity 900ms cubic-bezier(.32,.72,0,1),transform 900ms cubic-bezier(.32,.72,0,1)}.reveal.is-visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
+@media(max-width:900px){.nav-links{display:none}.cover{margin:0 10px}.cover::before{font-size:25vw;top:120px}.cover-inner{grid-template-columns:1fr}.cover-inner>div:first-child{padding-top:150px}.cover-inner>div:last-child{margin:-80px auto -100px!important;max-width:700px}.chapter-inner{grid-template-columns:1fr}.chapter-index{position:static}.nom-strip,.nom-ref{grid-template-columns:1fr 1fr}.learning-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:767px){nav{padding:0 18px}.cover{border-radius:0 0 30px 30px;min-height:auto;padding:130px 0 86px}.cover::before{font-size:29vw;top:112px}.cover-inner,.w{padding-left:16px;padding-right:16px}.cover-inner>div:first-child{padding-top:100px}.cover-h1{font-size:58px}.cover-meta{grid-template-columns:1fr}.cover-inner>div:last-child{margin:-30px auto -60px!important}.cover-stats{border-radius:22px;grid-template-columns:1fr 1fr;margin-left:16px;margin-right:16px}.chapter{padding-top:104px}.chapter-title{font-size:44px}.cols-2,.cols-3,.nom-strip,.nom-ref,.exc-grid,.learning-grid{grid-template-columns:1fr!important}.se-stack{grid-template-columns:1fr;padding-left:16px;padding-right:16px}.ri{grid-template-columns:1fr;gap:10px}.re{text-align:left}.di{grid-template-columns:48px 1fr}.dn{font-size:44px}}
+
+/* Metafore-inspired teal iteration */
+body{
+  --meta-teal:color-mix(in srgb,var(--cp-success) 58%,var(--cp-link));
+  --meta-mint:color-mix(in srgb,var(--cp-surface) 94%,var(--meta-teal));
+  --meta-grid:color-mix(in srgb,var(--cp-border) 45%,transparent);
+  --red:var(--meta-teal);
+  --red-lt:var(--meta-mint);
+  --surf:color-mix(in srgb,var(--cp-surface) 97%,var(--meta-teal));
+  background:var(--cp-surface);
+}
+body::before{background:none}
+nav{background:var(--cp-panel-strong);box-shadow:0 0 0 1px var(--cp-sheen),0 14px 38px var(--cp-accent-soft)}.nav-brand span{color:var(--meta-teal)}.nav-links a:hover{background:var(--meta-mint)}
+.cover{background-color:var(--cp-surface);background-image:none;border-radius:0;margin:0;min-height:100dvh;padding-bottom:clamp(88px,10vw,132px)}
+.cover::before{display:none}.cover::after{background-color:transparent;background-image:linear-gradient(var(--meta-grid) 1px,transparent 1px),linear-gradient(90deg,var(--meta-grid) 1px,transparent 1px);background-size:52px 52px;content:"";inset:0;mask-image:linear-gradient(to bottom,var(--cp-text) 0%,var(--cp-text) 62%,transparent 96%);opacity:1;pointer-events:none;position:absolute;-webkit-mask-image:linear-gradient(to bottom,var(--cp-text) 0%,var(--cp-text) 62%,transparent 96%);z-index:0}
+.cover-inner{align-items:center;grid-template-columns:.95fr 1.05fr;max-width:none;padding-left:208px;padding-right:208px;width:100%}.cover-inner>div:first-child{padding-top:70px}.cover-inner>div:last-child{margin:20px -2vw -90px 0!important}
+.cover-label{background:var(--meta-mint);color:var(--meta-teal)}.cover-label::before{background:var(--meta-teal)}
+.cover-h1{font-size:clamp(62px,8vw,116px);font-weight:660;line-height:.88;max-width:700px}.cover-h1 em{color:var(--meta-teal);font-weight:560}.cover-p{color:var(--cp-text-muted);max-width:620px}
+.cover-meta-cell{background:var(--cp-panel-strong);border:1px solid color-mix(in srgb,var(--cp-border) 55%,transparent);box-shadow:0 0 0 5px var(--cp-sheen)}.cover-meta-label{color:var(--meta-teal)}
+.cover-stats{background:var(--cp-text);border-radius:0;margin-top:0;max-width:none;padding-left:max(24px,calc((100vw - 1120px)/2));padding-right:max(24px,calc((100vw - 1120px)/2))}.cover-stat{border-color:var(--cp-border-strong)}
+.chapter{padding-top:clamp(120px,16vw,196px)}.chapter-num{color:color-mix(in srgb,var(--cp-border) 74%,var(--cp-surface))}.chapter-tag{background:var(--meta-mint);color:var(--meta-teal)}
+.chapter-num,.dn{color:var(--meta-teal)!important}
+.cover-label,.chapter-tag,.snum,.closing-label{font-size:11px!important;font-weight:750!important;letter-spacing:.11em!important}
+.cover-label .platform-icons{align-items:center;border-left:1px solid color-mix(in srgb,var(--meta-teal) 28%,transparent);display:inline-flex;gap:7px;margin-left:3px;padding-left:10px}.cover-label .platform-icon{display:block;fill:currentColor;height:15px;width:15px}
+.chapter-title{font-size:clamp(46px,6.2vw,82px)}.chapter-title em{color:var(--meta-teal);font-weight:570}.chapter-lead{color:var(--cp-text-muted);font-size:clamp(18px,1.8vw,23px)}
+.pull{background:var(--cp-text)}.pull p em,.pull-source{color:var(--meta-teal)}
+.pull-source{color:color-mix(in srgb,var(--meta-teal) 55%,var(--cp-surface));font-size:12px;font-weight:750;letter-spacing:.11em}
+.ic-panel{box-shadow:0 0 0 7px var(--cp-surface-soft)}.ic-panel.before{background:var(--cp-surface)}.ic-panel.after{background:var(--cp-text)}.ic-heading-dot{background:var(--meta-teal)!important}.ic-icon{background:var(--meta-mint)!important}.ic-icon svg{stroke:var(--meta-teal)!important}
+.ic-panel.after .ic-heading{color:var(--meta-teal)!important}.ic-panel.before .ic-heading{color:var(--cp-danger)!important}.ic-panel.before .ic-heading-dot{background:var(--cp-danger)!important}.ic-panel.before .ic-icon{background:color-mix(in srgb,var(--cp-surface) 92%,var(--cp-danger))!important}.ic-panel.before .ic-icon svg{stroke:var(--cp-danger)!important}
+.nom-step,.nom-step:nth-child(1),.nom-step:nth-child(3),.nom-step:nth-child(4){background:var(--cp-surface-soft)}.nom-step:nth-child(2){background:var(--cp-text)}.nom-num{color:var(--meta-teal)}
+.nom-step,.nom-step:nth-child(1),.nom-step:nth-child(2),.nom-step:nth-child(3),.nom-step:nth-child(4){background:color-mix(in srgb,var(--meta-teal) 72%,var(--cp-text))!important}.nom-step .nom-name,.nom-step .nom-num,.nom-step .nom-example,.nom-step .nom-desc{color:var(--cp-accent-fg)!important}.nom-step .nom-example,.nom-step .nom-desc{opacity:.72}
+.nom-ref,.exc-grid,.learning-grid{background:var(--meta-mint)!important}.nrc-bar,.nom-ref .nrc:nth-child(1) .nrc-bar,.nom-ref .nrc:nth-child(2) .nrc-bar,.nom-ref .nrc:nth-child(3) .nrc-bar,.nom-ref .nrc:nth-child(4) .nrc-bar{background:var(--meta-teal)}
+.sdot{background:var(--meta-teal)}.snum{color:var(--meta-teal)}
+.exc-cell:nth-child(2),.learning-card:nth-child(3){background:var(--cp-text)!important}.exc-cell:nth-child(1) .exc-num,.exc-cell:nth-child(3) .exc-num,.exc-cell:nth-child(4) .exc-num{color:var(--meta-teal)}
+.rb,.rb-srv,.rb-ui,.rb-auto,.rb-role{background:var(--meta-mint);color:var(--cp-text)}.dn{color:var(--meta-teal)}
+.learning-card>div:first-child{background:var(--meta-mint)!important}.learning-card svg{stroke:var(--meta-teal)}
+.learning-card,.learning-card:nth-child(1),.learning-card:nth-child(2),.learning-card:nth-child(3),.learning-card:nth-child(4),.learning-card:nth-child(5){background:color-mix(in srgb,var(--meta-teal) 72%,var(--cp-text))!important}.learning-card>div:not(:first-child){color:var(--cp-accent-fg)!important}
+.learning-card,.learning-card:nth-child(1),.learning-card:nth-child(2),.learning-card:nth-child(3),.learning-card:nth-child(4),.learning-card:nth-child(5){background:var(--cp-surface-soft)!important}.learning-card>div:not(:first-child){color:var(--cp-text)!important}.learning-card>div:last-child{color:var(--cp-text-muted)!important}
+.learning-grid{background:color-mix(in srgb,var(--cp-surface) 97%,var(--cp-border))!important}.learning-card:nth-child(3)>div:not(:first-child){color:var(--cp-text)!important}.learning-card:nth-child(3)>div:last-child{color:var(--cp-text-muted)!important}
+footer>div:first-child{color:var(--cp-text)!important}footer>div:last-child{color:var(--meta-teal)!important}
+.cover-inner>div:last-child img,.nrc-img img,.img-full img{filter:none!important;mix-blend-mode:normal!important;opacity:1!important;transform:none!important}
+@media(max-width:1100px){.cover-inner{padding-left:104px;padding-right:104px}}
+@media(max-width:900px){.cover-inner{grid-template-columns:1fr;padding-left:52px;padding-right:52px}.cover-inner>div:first-child{padding-top:80px}.cover-inner>div:last-child{margin:-10px auto -70px!important}}
+@media(max-width:767px){.cover{padding-top:126px}.cover-inner>div:first-child{padding-top:26px}.cover-h1{font-size:60px}.cover-inner>div:last-child{margin:0 auto -50px!important}.cover-stats{padding:0 16px}}
+.nom-step:not(:last-child)::after{align-items:center;color:var(--meta-teal);content:"→";display:flex;font-size:24px;font-weight:800;height:32px;justify-content:center;right:-24px;top:50%;transform:translateY(-50%);width:32px;z-index:3}
+.nav-links a.is-active{background:var(--meta-mint);color:var(--meta-teal);font-weight:800}.nav-links a.is-active::after{background:var(--meta-teal);border-radius:50%;content:"";display:inline-block;height:5px;margin-left:7px;vertical-align:middle;width:5px}
+.rl{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr));margin:40px 0}.ri,.ri:last-child{align-content:start;background:var(--cp-surface-soft);border:0;border-radius:22px;display:grid;gap:18px;grid-template-columns:1fr;min-height:230px;padding:24px}.rn{font-size:16px;line-height:1.35}.rd{font-size:13.5px;line-height:1.65}.re{text-align:left}.ri .rb{display:inline-flex;margin-top:auto;width:max-content}
+.ri .rb{background:color-mix(in srgb,var(--cp-surface) 58%,var(--cp-text));color:var(--cp-text);font-weight:750}
+.scan-modes{margin:clamp(72px,9vw,120px) auto;max-width:1200px;padding:0 48px}.scan-modes-kicker{color:var(--meta-teal);font-family:var(--mono);font-size:11px;font-weight:750;letter-spacing:.14em;margin-bottom:14px;text-transform:uppercase}.scan-modes h3{color:var(--cp-text);font-family:var(--display);font-size:clamp(30px,3.2vw,46px);font-weight:700;letter-spacing:-.045em;line-height:1.06;margin-bottom:38px;max-width:1120px}.scan-model-grid,.scan-choice-grid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}.scan-model-grid{margin-bottom:10px}.scan-mode-card{background:var(--cp-surface-soft);border:1px solid color-mix(in srgb,var(--cp-border) 55%,transparent);border-radius:20px;padding:28px}.scan-mode-label{color:var(--meta-teal);font-family:var(--mono);font-size:10px;font-weight:750;letter-spacing:.13em;margin-bottom:18px;text-transform:uppercase}.scan-model-row{align-items:flex-start;display:flex;gap:14px}.scan-model-row+.scan-model-row{margin-top:18px}.scan-model-icon{align-items:center;background:var(--meta-mint);border-radius:9px;color:var(--meta-teal);display:flex;flex:0 0 34px;height:34px;justify-content:center}.scan-model-icon svg{height:17px;width:17px}.scan-model-title,.scan-rule-title,.scan-choice-title{color:var(--cp-text);font-size:16px;font-weight:720;line-height:1.4}.scan-model-copy,.scan-rule-copy,.scan-choice-copy{color:var(--cp-text-muted);font-size:13.5px;line-height:1.65}.scan-rules{display:grid;gap:10px}.scan-rule{background:var(--cp-surface);border-radius:12px;padding:16px 18px}.scan-rule-title span{color:var(--meta-teal)}.scan-choice-card{background:var(--cp-surface-soft);border-radius:20px;padding:28px}.scan-choice-card.primary{background:var(--meta-mint)}.scan-choice-card .scan-mode-label{margin-bottom:12px}.scan-choice-copy{margin-top:8px}.scan-choice-note{color:var(--meta-teal);font-family:var(--mono);font-size:10px;font-weight:650;letter-spacing:.05em;margin-top:18px}.scan-why{background:var(--cp-text);border-radius:18px;color:color-mix(in srgb,var(--cp-surface) 74%,transparent);font-size:13.5px;line-height:1.7;margin-top:10px;padding:20px 24px}.scan-why strong{color:var(--cp-surface)}
+@media(max-width:1000px){.rl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){.nom-step:not(:last-child)::after{bottom:-24px;left:50%;right:auto;top:auto;transform:translateX(-50%) rotate(90deg)}.rl{grid-template-columns:1fr}.ri,.ri:last-child{min-height:0;padding:22px}.scan-modes{margin:72px auto;padding:0 16px}.scan-model-grid,.scan-choice-grid{grid-template-columns:1fr}.scan-mode-card,.scan-choice-card{padding:22px}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/shell.css?v=3">
+<link rel="stylesheet" href="../assets/harmonize.css?v=3">
+<style>/* portfolio header replaces the original fixed nav */html{scroll-padding-top:100px}html[data-theme="dark"]{--cp-bg:#1c1b19;--cp-bg-elevated:#151412;--cp-surface:#1f1d1a;--cp-surface-soft:#252320;--cp-border:#2f2c28;--cp-border-strong:#4a4640;--cp-panel:rgba(31,29,26,.72);--cp-panel-strong:rgba(31,29,26,.96);--cp-overlay:rgba(21,20,18,.88)}.cover{min-height:calc(100dvh - 84px)!important;padding-top:clamp(56px,7vw,96px)!important}@media (max-width:880px){.chapter-inner,#screens [style*="grid-template-columns:140px"]{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}.chapter-inner>*{min-width:0}}@media (max-width:760px){[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}</style>
+</head>
+<body class="pf-body pf-mid">
+<!-- ===== Portfolio shell (assets/shell.css) ===== -->
+<button class="pf pf-rail pf-rail-l" id="pfRailL" data-pf-contact aria-label="Get in touch"><span id="pfRailLabel">Get in touch</span></button>
+<div class="pf pf-rail pf-rail-r">
+  <button class="pf-icon pf-plus" data-pf-menu aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/></svg></button>
+  <button class="pf-icon" data-theme-toggle aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+</div>
+<div class="pf pf-header" role="banner">
+  <div class="pf-nav">
+    <div class="pf-left"><a class="pf-icon pf-back" href="../index.html#work" aria-label="Back to work" title="Back to work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></a><a href="../index.html" class="pf-brand">Suraj</a></div>
+    <div class="pf-links" role="navigation" aria-label="Main">
+      <a href="../about.html">About</a><a href="../index.html#work" aria-current="page">Work</a><a href="../index.html#experience">Experience</a><a href="../index.html#articles">Articles</a><a href="#" data-pf-contact>Contact</a>
+    </div>
+    <div class="pf-end">
+      <span class="pf-clock" id="pfClock">Kodagu, Karnataka<b>✳</b>--:--</span>
+      <button class="pf-icon pf-mobile" data-theme-toggle aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+      <button class="pf-icon pf-plus pf-mobile" data-pf-menu aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg></button>
+    </div>
+  </div>
+</div>
+<!-- ===== Original project document ===== -->
+
+
+
+
+<div class="cover" id="top">
+  <div class="cover-inner">
+    <div>
+      <div class="cover-label">
+        Design Documentation &middot; Mid Mile &middot; 2026
+        <span class="platform-icons" aria-label="Available on Android and iOS">
+          <svg class="platform-icon" viewBox="0 0 24 18" role="img" aria-label="Android"><path d="m7.3 4.2-1.5-2a.7.7 0 0 1 1.1-.8l1.6 2.1A9.3 9.3 0 0 1 12 2.8c1.2 0 2.4.2 3.5.7l1.6-2.1a.7.7 0 0 1 1.1.8l-1.5 2A8.2 8.2 0 0 1 20.2 10H3.8a8.2 8.2 0 0 1 3.5-5.8ZM3.8 11.3h16.4v4.1a1.6 1.6 0 0 1-1.6 1.6H5.4a1.6 1.6 0 0 1-1.6-1.6v-4.1Z"/><circle cx="8.3" cy="7.2" r="1" fill="var(--meta-mint)"/><circle cx="15.7" cy="7.2" r="1" fill="var(--meta-mint)"/></svg>
+          <svg class="platform-icon" viewBox="0 0 24 24" role="img" aria-label="iOS"><path d="M16.7 12.9c0-2.7 2.2-4 2.3-4.1a5 5 0 0 0-3.9-2.1c-1.7-.2-3.2 1-4.1 1-.9 0-2.2-1-3.7-1-1.9 0-3.7 1.1-4.7 2.9-2 3.5-.5 8.7 1.4 11.5 1 1.4 2.1 2.9 3.6 2.8 1.4-.1 2-1 3.7-1 1.7 0 2.2 1 3.7 1 1.5 0 2.5-1.4 3.5-2.8 1.1-1.6 1.6-3.2 1.6-3.3-.1 0-3.4-1.3-3.4-4.9ZM14 5c.8-1 1.4-2.4 1.2-3.8-1.2.1-2.6.8-3.5 1.8-.8.9-1.4 2.3-1.2 3.6 1.3.1 2.7-.6 3.5-1.6Z"/></svg>
+        </span>
+      </div>
+      <h1 class="cover-h1">Pre&#8209;<em>Load</em><br>Mobile App</h1>
+      <p class="cover-p">A warehouse-floor loading tool for hub staff - digitising <strong>the gap between route creation and last-mile dispatch</strong>.</p>
+      <div class="cover-meta" style="margin-top:32px;">
+        <div class="cover-meta-cell"><div class="cover-meta-label">Product area</div><div class="cover-meta-value">Mid-Mile Hub Operations</div></div>
+        <div class="cover-meta-cell"><div class="cover-meta-label">Design owner</div><div class="cover-meta-value">Suraj &middot; Product Design &middot; FarEye</div></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:flex-end;margin-right:-48px;margin-top:-80px;margin-bottom:-80px;margin-left:-60px;">
+      <img style="width:100%;display:block;" src="../images/work/mid-mile/00-hero.png">
+    </div>
+  </div>
+</div>
+
+<div class="w">
+<div class="chapter" id="objective">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">01</div><div class="chapter-tag">Objective</div></div>
+    <div>
+      <h2 class="chapter-title">What breaks without this app.</h2>
+      <p class="chapter-lead">After routes are created, hub staff physically load shipments onto vehicles - entirely offline. No scan, no confirmation, no exception record.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin:28px 0;">
+        <div class="ic-panel before">
+          <div class="ic-heading"><div class="ic-heading-dot"></div>Before this app</div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></div><div><div class="ic-label">No load confirmation</div><div class="ic-desc">No digital proof items were placed on <strong>the correct vehicle before departure</strong>.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="ic-label">Exceptions found at the door</div><div class="ic-desc">Damaged or missing units discovered <strong>mid-delivery, not at the hub</strong>.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="17" y1="17" x2="22" y2="22"/><line x1="22" y1="17" x2="17" y2="22"/></svg></div><div><div class="ic-label">Wrong counts in driver's app</div><div class="ic-desc">Planned counts shown, not actual loaded counts - never reconciled.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="17" y1="17" x2="22" y2="22"/><line x1="22" y1="17" x2="17" y2="22"/></svg></div><div><div class="ic-label">No accountability trail</div><div class="ic-desc">No audit trail of who loaded what and when.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><line x1="12" y1="18" x2="15" y2="15"/><line x1="15" y1="18" x2="12" y2="15"/></svg></div><div><div class="ic-label">Unassigned vehicles at dispatch</div><div class="ic-desc">Driver starts with wrong or unassigned vehicle.</div></div></div>
+        </div>
+        <div class="ic-panel after">
+          <div class="ic-heading"><div class="ic-heading-dot"></div>After this app</div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="ic-label">Scan-or-manual confirmation</div><div class="ic-desc">Every unit confirmed loaded per route before dispatch.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div><div><div class="ic-label">Exceptions caught at the hub</div><div class="ic-desc">Structured exception logging at the unit level before the driver moves.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><polyline points="9 7 12 10 15 7"/><line x1="12" y1="10" x2="12" y2="17"/></svg></div><div><div class="ic-label">Driver's app reflects reality</div><div class="ic-desc">Actual loaded counts flow to the driver's app <strong>automatically on completion</strong>.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><polyline points="16 11 17 13 21 9"/></svg></div><div><div class="ic-label">Named witness + signature</div><div class="ic-desc">Named coworker witness + signature for every exception - attributable audit chain.</div></div></div>
+          <div class="ic-item"><div class="ic-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><polyline points="16 11 17 13 21 9"/></svg></div><div><div class="ic-label">Vehicle enforced before loading</div><div class="ic-desc">Hard gate - no loading begins without vehicle confirmed.</div></div></div>
+        </div>
+      </div>
+      <div class="pull"><p>&ldquo;Exceptions are logged at the hub, before dispatch.&rdquo;</p><div class="pull-source">Core design principle</div></div>
+      <div class="cols-2" style="margin-top:24px;">
+        <div><h4>Roles &amp; access</h4><p>The <strong>Loader</strong> is a distinct role and login - entirely separate from the last-mile Driver. No screen, action, or data is shared between the two personas. The Loader sees all routes for their hub regardless of status (RFD or Assigned).</p></div>
+        <div><h4>Scope</h4><p>This app covers only the loading window - between route planning and vehicle departure. It does not handle route creation, last-mile delivery, or driver assignment.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="nomenclature">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">02</div><div class="chapter-tag">Nomenclature</div></div>
+    <div>
+      <h2 class="chapter-title">How data is structured in supply chain.</h2>
+      <p class="chapter-lead">Four levels. Every label, field, and API parameter across the product uses these terms - no synonyms.</p>
+      <div class="nom-strip">
+        <div class="nom-step"><div class="nom-num">Level 01</div><div class="nom-name">Route</div><div class="nom-example">e.g. RTR-BOM-0042</div><div class="nom-desc">The vehicle-level loading unit. One Loader works one Route at a time.</div></div>
+        <div class="nom-step"><div class="nom-num">Level 02</div><div class="nom-name">Consignment</div><div class="nom-example">e.g. 5 per route</div><div class="nom-desc">A customer order within the Route. Has a loading sequence number.</div></div>
+        <div class="nom-step"><div class="nom-num">Level 03</div><div class="nom-name">Items</div><div class="nom-example">e.g. SKU or shipment</div><div class="nom-desc">A distinct product line within a Consignment. Has a planned qty. 1 shipment = 1 item. 1 SKU = 1 or more items.</div></div>
+        <div class="nom-step"><div class="nom-num">Level 04</div><div class="nom-name">Units</div><div class="nom-example">e.g. qty within item</div><div class="nom-desc">Individual countable pieces of an Item. Scanned or entered one by one.</div></div>
+      </div>
+      <div class="nom-ref">
+        <div class="nrc"><div class="nrc-bar"></div><div class="nrc-label">In the app - Route / Trip card</div><div class="nrc-img"><img src="../images/work/mid-mile/nom-route.png" alt="Route / Trip card"></div></div>
+        <div class="nrc"><div class="nrc-bar"></div><div class="nrc-label">In the app - Consignment card (collapsed list, with attribute badges)</div><div class="nrc-img"><img src="../images/work/mid-mile/nom-consignment.png" alt="Consignment card - collapsed list view"></div></div>
+        <div class="nrc"><div class="nrc-bar"></div><div class="nrc-label">In the app - Item card (Shipment-type &amp; SKU-type)</div><div class="nrc-img"><img src="../images/work/mid-mile/nom-item.png" alt="Item card - shipment-type and SKU-type"></div></div>
+        <div class="nrc"><div class="nrc-bar"></div><div class="nrc-label">In the app - Units (inside Item card)</div><div class="nrc-img"><img src="../images/work/mid-mile/nom-units.png" alt="Units - Qty field inside Item card"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div class="chapter" id="flow">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">03</div><div class="chapter-tag">UX Flow</div></div>
+    <div>
+      <h2 class="chapter-title">Loading flow &amp;<br><em>interaction states.</em></h2>
+      <p class="chapter-lead">Each step in the loading process triggers a specific interaction. Some states only appear when the context requires them - based on vehicle assignment, exception logging, or completion status.</p>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-bottom:0;">
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">01</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">02</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">03</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">04</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">05</div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;">Route<br>List</div></div><div style="flex:1;height:0;border-top:1.5px solid var(--ink-4);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--ink-4);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--warn);line-height:1.3;">Vehicle<br>Assign</div></div><div style="flex:1;height:0;border-top:1.5px dashed var(--warn);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--warn);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;">Route<br>Detail</div></div><div style="flex:1;height:0;border-top:1.5px solid var(--ink-4);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--ink-4);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V5a2 2 0 012-2h4M15 3h4a2 2 0 012 2v4M21 15v4a2 2 0 01-2 2h-4M9 21H5a2 2 0 01-2-2v-4"/><line x1="7" y1="12" x2="7.01" y2="12"/><line x1="12" y1="12" x2="17" y2="12"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;">Scan<br>Mode</div></div><div style="flex:1;height:0;border-top:1.5px solid var(--ink-4);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--ink-4);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;">Exception</div></div></div>
+        <div style="padding-right:20px;padding-bottom:28px;"><div style="font-size:11px;color:var(--ink-3);line-height:2;">Pending tab<br>Loaded tab<br>Filter by dock<br>Tap to open</div></div>
+        <div style="padding-right:20px;padding-bottom:28px;"><div style="font-size:11px;color:var(--warn);line-height:2;font-style:italic;">Only if no vehicle<br>assigned from routing<br>Enter plate no.<br>Confirm or close</div></div>
+        <div style="padding-right:20px;padding-bottom:28px;"><div style="font-size:11px;color:var(--ink-3);line-height:2;">CON sequence<br>SKU items<br>Vehicle verify<br>Progress bar</div></div>
+        <div style="padding-right:20px;padding-bottom:28px;"><div style="font-size:11px;color:var(--ink-3);line-height:2;">Bulk (shipment)<br>Individual (SKU)<br>Item confirm<br>Edit inline</div></div>
+        <div style="padding-right:20px;padding-bottom:28px;"><div style="font-size:11px;color:var(--ink-3);line-height:2;">Damaged<br>Missing<br>Photo evidence<br>Fit / Not fit</div></div>
+      </div>
+      <div style="height:1px;background:var(--rule);margin:8px 0 28px;"></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">06</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">07</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">08</div>
+        <div style="font-family:var(--display);font-size:14px;font-weight:700;color:var(--rule);letter-spacing:-.3px;padding-bottom:8px;">09</div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--warn);line-height:1.3;">Block<br>Check</div></div><div style="flex:1;height:0;border-top:1.5px dashed var(--warn);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--warn);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;">Summary</div></div><div style="flex:1;height:0;border-top:1.5px solid var(--ink-4);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--ink-4);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;padding-right:8px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 19.5c-2.5 0-2.5-1-5-1s-2.5 1-5 1-2.5-1-5-1"/><path d="M4 9.5c2.5 0 2.5 1 5 1s2.5-1 5-1 2.5 1 5 1"/><line x1="12" y1="5" x2="12" y2="19"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--warn);line-height:1.3;">Signature</div></div><div style="flex:1;height:0;border-top:1.5px dashed var(--warn);margin:19px 0 0 10px;position:relative;min-width:12px;"><div style="position:absolute;right:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--warn);"></div></div></div>
+        <div style="display:flex;align-items:flex-start;padding-bottom:18px;"><div style="display:flex;flex-direction:column;gap:5px;"><div style="width:40px;height:40px;border-radius:11px;background:var(--surf);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div style="font-size:13px;font-weight:700;color:var(--ok);line-height:1.3;">Complete</div></div></div>
+        <div style="padding-right:20px;"><div style="font-size:11px;color:var(--warn);line-height:2;font-style:italic;">Only if unactioned<br>items remain</div></div>
+        <div style="padding-right:20px;"><div style="font-size:11px;color:var(--ink-3);line-height:2;">4-bucket view<br>Swipe to complete</div></div>
+        <div style="padding-right:20px;"><div style="font-size:11px;color:var(--warn);line-height:2;font-style:italic;">Only if exception<br>was logged</div></div>
+        <div><div style="font-size:11px;color:var(--ok);line-height:2;">TID confirmed<br>Record locked</div></div>
+      </div>
+      <div style="display:flex;gap:24px;margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);">
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);"><div style="width:20px;height:1px;background:var(--ink-4);"></div>Always shown</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);"><div style="width:20px;height:0;border-top:1.5px dashed var(--warn);"></div>Conditional</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);"><div style="width:10px;height:10px;border-radius:50%;background:var(--ok);"></div>Terminal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+</div>
+
+<div id="screens" style="padding-top:72px;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px 40px;">
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:60px;">
+      <div><div class="chapter-num">04</div><div class="chapter-tag">Screens</div></div>
+      <div><h2 class="chapter-title">UX screens &amp; design rationale.</h2><p class="chapter-lead">Each screen with annotation and the design decision that shaped it.</p></div>
+    </div>
+  </div>
+
+
+  <div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s01-home-route-list.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 00-01 - Home &amp; Route List">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s02-route-details.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 02 - Route Details &amp; Vehicle Verify">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s03-loading-scanning.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 03 - Loading State & Item Scanning">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s04a-scan-initiation.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 04a - Scan Initiation & Bulk Action">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s04b-manual-entry.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 04b - Manual Entry, Edit Item & Exception Inline">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s05a-exception-shipment.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 05a - Exception, Shipment Level">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s05b-exception-sku.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 05a - Exception, SKU Level">
+</div><div style="border-top:1px solid var(--rule);padding:48px;max-width:1200px;margin:0 auto;">
+  <img src="../images/work/mid-mile/s06-loading-complete.jpg" style="width:100%;display:block;border-radius:8px;" alt="Screen 06 - Loading Complete">
+</div>
+
+<div class="w">
+<div class="chapter-divider"></div>
+
+<section class="scan-modes" id="continuous-scan-modes">
+  <div class="scan-modes-kicker">Continuous Scan Mode</div>
+  <h3>Two scan modes - Bulk and Individual - depending on whether the delivery is at shipment level or SKU level. The Loader chooses at scan initiation.</h3>
+
+  <div class="scan-model-grid">
+    <article class="scan-mode-card">
+      <div class="scan-mode-label">CON Data Model</div>
+      <div class="scan-model-row">
+        <div class="scan-model-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
+        <div><div class="scan-model-title">1 CON &rarr; multiple Shipments</div><div class="scan-model-copy">Each shipment = always 1 item. A CON containing 5 shipments = 5 items, each scanned separately.</div></div>
+      </div>
+      <div class="scan-model-row">
+        <div class="scan-model-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <div><div class="scan-model-title">1 CON &rarr; multiple SKUs</div><div class="scan-model-copy">Each SKU = 1 or more items of the same product. A CON can mix different SKUs, each with their own planned quantity.</div></div>
+      </div>
+    </article>
+
+    <article class="scan-mode-card">
+      <div class="scan-mode-label">Scanning Unit Rule</div>
+      <div class="scan-rules">
+        <div class="scan-rule"><div class="scan-rule-title">1 Shipment = always <span>1 item</span></div><div class="scan-rule-copy">Scan the shipment label &rarr; entire item confirmed in one scan</div></div>
+        <div class="scan-rule"><div class="scan-rule-title">1 SKU = <span>1 or multiple items</span> of the same SKU</div><div class="scan-rule-copy">Scan each unit barcode individually to increment count</div></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="scan-choice-grid">
+    <article class="scan-choice-card primary">
+      <div class="scan-mode-label">Scan Bulk</div>
+      <div class="scan-choice-title">Shipment-level scanning</div>
+      <div class="scan-choice-copy">Scan the CON ID or shipment label. One scan = one shipment item confirmed. Used when the CON contains discrete pre-packed shipments - each with its own scannable label.</div>
+      <div class="scan-choice-note">Default option - primary CTA</div>
+    </article>
+    <article class="scan-choice-card">
+      <div class="scan-mode-label">Scan Individual</div>
+      <div class="scan-choice-title">SKU-level scanning</div>
+      <div class="scan-choice-copy">Scan each unit barcode one by one. Each scan increments the matched SKU's loaded quantity by 1. Used for retail clients where CONs contain multiple SKUs with individual barcodes.</div>
+      <div class="scan-choice-note">Secondary option - retail / SKU-heavy workflows</div>
+    </article>
+  </div>
+
+  <div class="scan-why"><strong>Why two modes exist:</strong> SKU-level scanning is built specifically for retail clients where a single CON contains many different SKUs, each needing individual barcode confirmation. Shipment-level bulk scan works for courier/logistics workflows where each shipment is a sealed unit with one label.</div>
+</section>
+
+<div id="exceptions" style="padding:72px 0 0;">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">05</div><div class="chapter-tag">Exception Buckets</div></div>
+    <div>
+      <h2 class="chapter-title">How every unit is classified after loading.</h2>
+      <p class="chapter-lead">Every unit gets one classification. The total can never exceed the planned quantity - validated server-side.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin:28px 0;">
+    <div style="background:var(--ok-lt);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+      <div>
+        <div style="font-family:var(--display);font-size:56px;line-height:1;letter-spacing:-3px;color:var(--ok);margin-bottom:12px;">01</div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px;">Loaded</div>
+        <div style="font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:12px;">Confirmed via scan or manual entry. Appears in driver's delivery manifest exactly as counted.</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ok);">&rarr; Stays on route &middot; No exception record</div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12);max-width:220px;justify-self:center;">
+        <img src="../images/work/mid-mile/b1-loaded.png" style="width:100%;display:block;">
+      </div>
+    </div>
+    <div style="background:var(--warn-lt);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+      <div>
+        <div style="font-family:var(--display);font-size:56px;line-height:1;letter-spacing:-3px;color:var(--warn);margin-bottom:12px;">02</div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px;">Damaged - Fit for delivery</div>
+        <div style="font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:12px;">Damaged but deliverable. Loaded onto vehicle. Exception logged - does not remove from driver's planned count.</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--warn);">&rarr; Stays on route &middot; Exception logged &middot; Signature gate</div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12);max-width:220px;justify-self:center;">
+        <img src="../images/work/mid-mile/b2-damaged-fit.png" style="width:100%;display:block;">
+      </div>
+    </div>
+    <div style="background:var(--err-lt);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;grid-column:1/-1;">
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <div>
+          <div style="font-family:var(--display);font-size:48px;line-height:1;letter-spacing:-3px;color:var(--err);margin-bottom:8px;">03</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">Damaged - Not fit for delivery</div>
+          <div style="font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:8px;">Too damaged to deliver. Pulled from route entirely. Driver's planned count auto-adjusts.</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--err);">&rarr; Dropped from route &middot; Driver count adjusts &middot; Signature gate</div>
+        </div>
+        <div style="border-top:1px solid rgba(204,14,3,.15);padding-top:24px;">
+          <div style="font-family:var(--display);font-size:48px;line-height:1;letter-spacing:-3px;color:var(--ink-3);margin-bottom:8px;">04</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">Missing</div>
+          <div style="font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:8px;">Cannot be located at the hub. Dropped from route. Both 03 and 04 appear together in the Exception tab.</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);">&rarr; Dropped from route &middot; Driver count adjusts &middot; Signature gate</div>
+        </div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12);max-width:220px;justify-self:center;">
+        <img src="../images/work/mid-mile/b3-not-fit-missing.png" style="width:100%;display:block;">
+      </div>
+    </div>
+  </div>
+  <div class="pull"><p>&ldquo;Signature is a mandatory field on every route completion, regardless of exception status.&rdquo;</p><div class="pull-source">Completion gate - always enforced</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+<div id="rules" style="padding:72px 0 0;">
+  <div class="chapter-inner">
+    <div class="chapter-index"><div class="chapter-num">06</div><div class="chapter-tag">Business Rules</div></div>
+    <div>
+      <h2 class="chapter-title">Rules enforced by the system.</h2>
+      <p class="chapter-lead">These rules are enforced by the backend, not just the UI. The client cannot bypass them.</p>
+  <div class="rl">
+    <div class="ri"><div class="rn">Unit bucket sum &le; planned qty</div><div class="rd">Loaded + damaged-fit + damaged-not-fit + missing can never exceed planned qty. UI blocks; server also rejects independently.</div><div class="re"><span class="rb rb-srv">Server-side</span></div></div>
+    <div class="ri"><div class="rn">One bucket per unit</div><div class="rd">A unit can only exist in one bucket at a time. Remaining = planned &minus; all buckets so far.</div><div class="re"><span class="rb rb-srv">Server-side</span></div></div>
+    <div class="ri"><div class="rn">Damaged&ndash;Not fit auto-drops</div><div class="rd">Any unit marked damaged&ndash;not fit is immediately removed from route. Driver count auto-adjusts.</div><div class="re"><span class="rb rb-auto">Auto</span></div></div>
+    <div class="ri"><div class="rn">Missing auto-drops</div><div class="rd">Missing units removed from route manifest before dispatch. Driver count adjusts.</div><div class="re"><span class="rb rb-auto">Auto</span></div></div>
+    <div class="ri"><div class="rn">Vehicle required before loading</div><div class="rd">No vehicle assigned &rarr; Loader must assign one before accessing Route Detail. Cannot be skipped.</div><div class="re"><span class="rb rb-ui">UI gate</span></div></div>
+    <div class="ri"><div class="rn">All items need action before completion</div><div class="rd">Tapping "Complete" with any item at 0 loaded and 0 exceptions shows Block Check screen. No bypass.</div><div class="re"><span class="rb rb-ui">UI gate</span></div></div>
+    <div class="ri"><div class="rn">Signature required for any exception</div><div class="rd">Mandatory for all route completions - not just when exceptions are logged. Cannot be bypassed under any circumstance.</div><div class="re"><span class="rb rb-ui">UI gate</span></div></div>
+    <div class="ri"><div class="rn">Loader edits until complete</div><div class="rd">Loader can edit any item's quantities until route is marked complete. After completion, manifest is locked.</div><div class="re"><span class="rb rb-srv">Server-side</span></div></div>
+    <div class="ri"><div class="rn">Loader &ne; Driver</div><div class="rd">Separate roles, separate logins, separate screens. Role separation enforced at API level.</div><div class="re"><span class="rb rb-role">Role-based</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+
+
+<div class="w">
+  <div style="padding:64px 0 56px;">
+    <div class="closing-label" style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);margin-bottom:10px;">Closing</div>
+    <h2 class="chapter-title" style="margin-bottom:36px;letter-spacing:-0.5px;">What did I learn from this story.</h2>
+    <div class="learning-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden;">
+      <div class="learning-card" style="background:#fff;padding:26px 20px;">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--red-lt);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3;">Design for the floor, not the desk</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">Field conditions &mdash; one-handed use, gloves, time pressure &mdash; shaped decisions more than visual preference did.</div>
+      </div>
+      <div class="learning-card" style="background:#fff;padding:26px 20px;">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--red-lt);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="17" r="2"/><path d="M7 8l7 3M15 14l-6 2"/></svg></div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3;">One vocabulary across many operations</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">Inbound, Put Away, Bagging, and Loading share the same interaction language, so training one operation trains all four.</div>
+      </div>
+      <div class="learning-card" style="background:#fff;padding:26px 20px;">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--red-lt);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3;">Exceptions are the real workflow</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">On the floor, damaged, missing, and unverified cases come up constantly &mdash; they needed as much design attention as the standard path.</div>
+      </div>
+      <div class="learning-card" style="background:#fff;padding:26px 20px;">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--red-lt);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg></div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3;">User-first, not system-first</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">The workflow was designed around how the Loader actually operates on the floor, not around backend or dev architecture &mdash; so the user's pain points were addressed first.</div>
+      </div>
+      <div class="learning-card" style="background:#fff;padding:26px 20px;">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--red-lt);display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="16" r="1.5" fill="var(--red)" stroke="none"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3;">Operational rules, not visual polish, drive the interface</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.5;">Backend constraints and audit requirements decided more of the interaction design than aesthetic choices did.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chapter-divider"></div>
+
+
+
+</div>
+
+<footer style="padding:56px 0;border-top:1px solid var(--rule);text-align:center;display:block;max-width:1200px;margin:0 auto;">
+  <div style="font-family:var(--display);font-weight:800;font-size:32px;letter-spacing:-.5px;color:var(--ink);">Thank you</div>
+  <div style="font-size:12px;font-weight:300;color:var(--ink-4);letter-spacing:.02em;margin-top:14px;">Product Designer 2 &middot; Daddera Suraj S &middot; FarEye</div>
+</footer>
+
+<script>
+  const scanModes = document.querySelector("#continuous-scan-modes");
+  const scanInitiation = document.querySelector('img[alt^="Screen 04a"]');
+  if (scanModes && scanInitiation) {
+    scanInitiation.closest("div").before(scanModes);
+  }
+
+  const revealTargets = document.querySelectorAll(
+    ".chapter-inner, .se-stack, .cover-meta, .cover-stats, .learning-card, .scan-modes"
+  );
+
+  revealTargets.forEach((element, index) => {
+    element.classList.add("reveal");
+    element.style.transitionDelay = `${Math.min(index % 3, 2) * 90}ms`;
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  revealTargets.forEach((element) => observer.observe(element));
+
+  const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const sections = navLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  const setActiveSection = (sectionId) => {
+    navLinks.forEach((link) => {
+      const isActive = link.getAttribute("href") === `#${sectionId}`;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  if (sections.length) {
+    setActiveSection(window.location.hash.slice(1) || sections[0].id);
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        const activeEntry = entries.find((entry) => entry.isIntersecting);
+        if (activeEntry) setActiveSection(activeEntry.target.id);
+      },
+      { rootMargin: "-28% 0px -62% 0px", threshold: 0 }
+    );
+
+    sections.forEach((section) => sectionObserver.observe(section));
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        setActiveSection(link.getAttribute("href").slice(1));
+      });
+    });
+  }
+</script>
+
+<!-- ===== Portfolio shell ===== -->
+<div class="pf pf-more"><div class="pf-mhead"><h2>More work</h2><span></span><a href="../index.html#work">All work</a></div><div class="pf-mgrid"><a class="pf-card" href="ai-assisted-workflow.html"><div class="pf-thumb"><img src="../images/projects/ai-assisted-design-workflow.png" alt="" loading="lazy"></div><h3>An AI-Assisted Design Workflow<span>Process, 2026</span></h3><p>Using AI as a continuous critic, not a generator, in the design process.</p></a><a class="pf-card" href="rate-calculation-logic-builder.html"><div class="pf-thumb"><img src="../images/projects/rate-calculation-logic-builder.png" alt="" loading="lazy"></div><h3>Rate Calculation Logic Builder<span>Enterprise web, 2026</span></h3><p>A visual builder for configuring rate calculation logic across shipments.</p></a></div></div>
+<div class="pf pf-footer" id="pfContact" role="contentinfo">
+  <p class="pf-tag">Digital Product Designer &nbsp;|&nbsp; Enterprise B2B SaaS</p>
+  <a class="pf-mail" href="mailto:surajdm23@gmail.com">surajdm23@gmail.com</a><br>
+  <button class="pf-ghost" data-pf-copy>Copy email</button>
+  <div class="pf-foot">
+    <div class="pf-cols">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../index.html#work">Work</a></li><li><a href="../index.html#experience">Resume</a></li><li><a href="../index.html#testimonials">Testimonials</a></li><li><a href="../index.html#articles">Articles</a></li></ul>
+      <ul><li><a href="https://www.linkedin.com/in/surajdm23/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li><li><a href="https://medium.com/@surajdm23" target="_blank" rel="noopener noreferrer">Medium</a></li><li><a href="https://www.behance.net/surajdsuraj" target="_blank" rel="noopener noreferrer">Behance</a></li></ul>
+    </div>
+    <small>© <span id="pfYear"></span> Suraj</small>
+  </div>
+</div>
+<div class="pf pf-scrim" id="pfScrim"></div>
+<div class="pf pf-menu" id="pfMenu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="pf-mtop"><strong>Suraj</strong><button class="pf-close" data-pf-close aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
+  <div class="pf-mlinks" role="navigation"><a href="../index.html">Home</a><a href="../about.html">About</a><a href="../index.html#services">Services</a><a href="../index.html#work">Work</a><a href="../index.html#experience">Experience</a><a href="../index.html#articles">Articles</a><a href="#" data-pf-contact>Contact</a></div>
+  <p class="pf-mfoot">Digital Product Designer &nbsp;|&nbsp; Enterprise B2B SaaS</p>
+</div>
+<div class="pf pf-drawer" id="pfDrawer" role="dialog" aria-modal="true" aria-label="Contact">
+  <div class="pf-dtop">
+    <div class="pf-socials"><a href="https://www.linkedin.com/in/surajdm23/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://medium.com/@surajdm23" target="_blank" rel="noopener noreferrer">Medium</a><a href="https://www.behance.net/surajdsuraj" target="_blank" rel="noopener noreferrer">Behance</a></div>
+    <button class="pf-close" data-pf-close aria-label="Close contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div>
+    <a class="pf-mail" href="mailto:surajdm23@gmail.com">surajdm23@gmail.com</a>
+    <p>Tell me a little about what you're building, your timeline and where you need help. I usually reply within two working days.</p>
+    <div class="pf-drow"><button class="pf-ghost" data-pf-copy>Copy email</button><a class="pf-ghost pf-drow-dl" href="../pdf/Daddera%20Suraj%20S%20-%20Resume.pdf" download="Daddera-Suraj-S-Resume.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CV</a></div>
+  </div>
+</div>
+<div class="pf pf-cursor" id="pfCursor" aria-hidden="true"></div>
+<script src="../assets/shell.js?v=3"></script>
+</body>
+</html>
