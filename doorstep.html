@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Designing from the Doorstep — Suraj</title>
+<meta name="description" content="UX meets the Last Mile: a day as a delivery rider on the LOTR application, told as a comic.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdfcfb; --surface:#EFEAE3; --ink:#1F201B; --muted:#73716A; --soft:#555654; --line:#E2DCD3;
+  --accent:#df0000; --on-accent:#FFF7F2;
+  --font:"Geist","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{--bg:#151412;--surface:#1F1D1A;--ink:#EEEBE5;--muted:#9C998F;--soft:#8f8f8f;--line:#2C2A26;--accent:#e7592d;--on-accent:#1A110C;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.top{max-width:760px;margin:0 auto;padding:28px 24px 0;display:flex;justify-content:space-between;align-items:center;font-size:15px}
+.top a{text-decoration:none;color:var(--muted);transition:color .2s}
+.top a:hover{color:var(--accent)}
+main{max-width:760px;margin:0 auto;padding:clamp(40px,7vw,88px) 24px clamp(80px,10vw,140px)}
+.tag{display:block;margin-bottom:18px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{margin:0 0 20px;font-size:clamp(34px,5.6vw,60px);font-weight:700;letter-spacing:-.04em;line-height:1.08}
+.byline{color:var(--muted);font-size:15px;margin-bottom:clamp(36px,5vw,56px)}
+p{margin:0 0 22px}
+.pull{margin:clamp(32px,4vw,48px) 0;padding-left:22px;border-left:3px solid var(--accent);font-size:clamp(22px,2.6vw,30px);font-weight:600;letter-spacing:-.025em;line-height:1.25}
+h2{margin:clamp(44px,6vw,72px) 0 18px;font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-.03em;line-height:1.2}
+ul.gain{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:12px}
+ul.gain li{padding-left:22px;position:relative}
+ul.gain li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:2px;background:var(--accent)}
+.comic{margin-top:clamp(28px,4vw,48px);display:grid;gap:clamp(20px,3vw,32px);justify-items:center}
+.page{margin:0;width:100%;max-width:640px}
+.page img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+.page figcaption{margin-top:8px;font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.end{margin-top:clamp(40px,6vw,64px);padding-top:28px;border-top:1px solid var(--line)}
+.end a{color:var(--accent);font-weight:600;text-decoration:none}
+.end a:hover{text-decoration:underline}
+</style>
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<div class="top"><a href="index.html#articles">&larr; Back to portfolio</a><span style="color:var(--muted)">Suraj</span></div>
+<main>
+  <span class="tag">UX meets the Last Mile</span>
+  <h1>Designing from the Doorstep</h1>
+  <div class="byline">Daddera Suraj &middot; Locus internship</div>
+
+  <p>During my internship at <a href="https://locus.sh/" target="_blank" rel="noopener noreferrer">Locus</a>, my design and product team did something a little different. I stepped into the shoes of a delivery rider and executed actual doorstep deliveries, going out on the ground and using the LOTR application (the delivery rider application), simulating a B2C and B2B client flow.</p>
+
+  <p class="pull">&ldquo;We didn&rsquo;t just use the app &mdash; we lived it.&rdquo;</p>
+
+  <p>To truly design for someone, you have to be them. Face the pressure of traffic, navigate tricky addresses, handle customers, and juggle app interactions on the go.</p>
+
+  <h2>What I gained</h2>
+  <ul class="gain">
+    <li>First-hand exposure to rider pain points</li>
+    <li>A deeper lens on empathy-driven design</li>
+    <li>Realisation of how small UX tweaks impact flow, effort, and motivation</li>
+    <li>Insights that go beyond the screen, into mindset, environment, and behaviour</li>
+  </ul>
+
+  <h2>The day, as a comic</h2>
+  <p>I even turned this journey into a comic, because sometimes visual stories tell ground truths better than words.</p>
+
+  <div class="comic" id="comic"></div>
+
+  <h2>One takeaway for every aspiring designer</h2>
+  <p><strong>Design starts on the ground, not just on a screen.</strong></p>
+  <p>Before jumping into secondary research or wireframes, talk to your users, observe them, and live their journey. No amount of internet research can replace primary, contextual, and participatory research.</p>
+  <p>Walking in your user&rsquo;s shoes, quite literally, builds unmatched empathy, clarity, and intuition. It helps you design not just for usability, but for motivation, emotion, and behaviour.</p>
+  <p>Don&rsquo;t hesitate to get your hands dirty. That&rsquo;s where real UX insight begins.</p>
+
+  <div class="end">A huge shoutout to the <a href="https://locus.sh/" target="_blank" rel="noopener noreferrer">Locus</a> design and product team for supporting this bold exploration. This experience taught me more about product design than any spec or screen ever could.<br><br><a href="index.html#articles">&larr; Back to portfolio</a></div>
+</main>
+<script>
+const caps=["Let’s go","Segregating the parcels","Start the trip, again","Pickup orders while scanning drops","Beta 01: the order card","The payment flow","Beta 02: ‘Not responding’","Beta 03: smooth deliveries","Afternoon break","Beta 04: the last door","The day, concluded"];
+const c=document.getElementById('comic');
+for(let i=1;i<=11;i++){const f=document.createElement('figure');f.className='page';
+  f.innerHTML=`<img src="images/doorstep/page-${String(i).padStart(2,'0')}.png" alt="Comic page ${i} of 11: ${caps[i-1]}" loading="lazy"><figcaption>${i} / 11</figcaption>`;c.appendChild(f)}
+</script>
+</body>
+</html>
