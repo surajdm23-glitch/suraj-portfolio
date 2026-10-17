@@ -1,0 +1,55 @@
+/* Harmonize the original project documents with the portfolio.
+   Loaded after each document's own styles (see tools/build_work_pages.py).
+   Layouts, components and project accent colours are untouched; only type, neutrals and
+   heading style move toward the portfolio. Delete this file's <link> to revert. */
+
+/* 1. Typography: Geist for headings and body. Mono labels and handwritten annotations keep their fonts. */
+html:root{
+  --display:"Geist","Helvetica Neue",Arial,sans-serif;
+  --body:"Geist","Helvetica Neue",Arial,sans-serif;
+}
+#proto-embed{--display:'Plus Jakarta Sans',sans-serif;--body:'Plus Jakarta Sans',sans-serif}
+
+/* 3. Heading style: portfolio weight and tracking, original sizes and positions */
+.pf-ai .cover-h1,.pf-ai .chapter-title,.pf-ai .stage-title,.pf-ai .close-quote,.pf-ai .phase-name,
+.pf-mid .cover-h1,.pf-mid .chapter-title{font-weight:600;letter-spacing:-.045em}
+.pf-ai .cover-h1 em,.pf-ai .chapter-title em,.pf-ai .close-quote em,
+.pf-mid .cover-h1 em,.pf-mid .chapter-title em{font-weight:600}
+.pf-ai .pull p,.pf-ai .case-transition p{font-weight:600;letter-spacing:-.02em}
+
+.pf-rate .h1{font-weight:500;letter-spacing:-.05em}
+.pf-rate .h1 em,.pf-rate .h1 strong{font-weight:700}
+.pf-rate .st{font-weight:400;letter-spacing:-.045em}
+.pf-rate .st strong{font-weight:700}
+.pf-rate .subh{font-weight:600;letter-spacing:-.03em}
+.pf-rate .mval,.pf-rate .statsx-num{letter-spacing:-.05em}
+
+/* 2. Rate neutrals: cool greys → the portfolio's warm off-white and warm lines (light theme) */
+html:not([data-theme="dark"]) .pf-rate{
+  --ink:#1F201B;--ink-2:#45443E;--ink-3:#73716A;--ink-4:#A29F97;--ink-5:#D8D3CB;
+  --rule:#E6E0D7;--surf:#F6F3EE;--white:#ffffff;
+  background:#fdfcfb;
+}
+html:not([data-theme="dark"]) .pf-rate .page{background:#fdfcfb}
+html:not([data-theme="dark"]) .pf-rate .flow-guide{background:#F3EFE9!important}
+/* the prototype keeps the original product UI */
+html:not([data-theme="dark"]) .pf-rate #proto-embed{
+  --ink:#111317;--ink-2:#3D4451;--ink-3:#6B7280;--ink-4:#9CA3AF;--ink-5:#D1D5DB;--rule:#E2E4E6;--surf:#F9FAFB;--white:#ffffff;
+}
+
+/* 4. One ending: drop the documents' own sign-offs; "Next project" and the portfolio footer follow */
+.pf-ai footer,.pf-mid footer{display:none!important}
+.pf-rate div[style*="padding:56px 0;border-top:1px solid var(--rule);text-align:center"]{display:none!important}
+
+/* 5. Mid-Mile hero: same column and top spacing as the Rate hero; larger phones.
+   The original used a fixed 208px side padding (designed without the portfolio's side rails). */
+.pf-mid .cover{min-height:0!important;padding-top:clamp(64px,8vw,112px)!important;padding-bottom:clamp(64px,7vw,104px)!important}
+.pf-mid .cover-inner{max-width:1240px!important;margin:0 auto!important;padding-left:clamp(24px,4vw,40px)!important;padding-right:clamp(24px,4vw,40px)!important;
+  grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)!important;gap:clamp(24px,3vw,48px)!important;align-items:center!important}
+.pf-mid .cover-inner>div:first-child{padding-top:0!important}
+.pf-mid .cover-inner>div:last-child{margin:0 -2vw 0 0!important;justify-content:center!important}
+.pf-mid .cover-inner>div:last-child img{width:100%!important;max-height:none!important}
+@media (max-width:900px){
+  .pf-mid .cover-inner{grid-template-columns:minmax(0,1fr)!important}
+  .pf-mid .cover-inner>div:last-child{margin:32px auto 0!important;max-width:620px}
+}
